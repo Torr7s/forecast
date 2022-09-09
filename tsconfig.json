@@ -17,11 +17,11 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "@src/*": ["./src/*"],
-      "@test/*": ["./test/*"]
+      "@tests/*": ["tests/*"]
     },
     "rootDirs": [
       "./src",
-      "./test"
+      "./tests"
     ],
     "resolveJsonModule": true,
     "esModuleInterop": true,
@@ -34,7 +34,7 @@
   },
   "include": [
     "./src/**/*.ts",
-    "./test/**/*.ts"
+    "./tests/**/*.ts"
   ],
   "exclude": [
     "./node_modules/*",
