@@ -1,4 +1,4 @@
-import * as path from 'node:path';
+const path = require('node:path');
 
 const root = path.resolve(__dirname);
 
