@@ -14,7 +14,9 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "yarn build && node ."
+    "start": "yarn build && node .",
+    "lint": "eslint ./src ./test --ext .ts",
+    "lint:fix": "eslint ./src ./test --ext .ts --fix"
   },
   "devDependencies": {
     "@types/module-alias": "^2.0.1",
