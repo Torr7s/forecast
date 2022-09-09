@@ -17,15 +17,18 @@
     "lint": "eslint ./src ./tests --ext .ts",
     "lint:fix": "eslint ./src ./tests --ext .ts --fix",
     "start": "yarn build && node .",
-    "start:dev": "tsnd --transpile-only --ignore-watch 'node_modules' --respawn 'src/index.ts'"
+    "start:dev": "tsnd --transpile-only --ignore-watch 'node_modules' --respawn 'src/index.ts'",
+    "test:func": "jest --projects ./tests --runInBand"
   },
   "dependencies": {
-    "module-alias": "^2.2.2"
+    "module-alias": "^2.2.2",
+    "supertest": "^6.2.4"
   },
   "devDependencies": {
     "@types/jest": "^29.0.0",
     "@types/module-alias": "^2.0.1",
     "@types/node": "^18.7.16",
+    "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.36.2",
     "@typescript-eslint/parser": "^5.36.2",
     "eslint": "^8.23.0",
