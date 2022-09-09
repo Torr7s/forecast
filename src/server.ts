@@ -1,11 +1,11 @@
 import './utils/module-alias';
 
-import express from 'express';
-import OvernightJs from '@overnightjs/core';
+import express, { Application } from 'express';
+import { Server } from '@overnightjs/core';
 
 import { ForecastController } from './controllers/forecast.controller';
 
-export class MainServer extends OvernightJs.Server {
+export class MainServer extends Server {
   constructor(private port: number = 3000) {
     super();
   };
@@ -30,5 +30,9 @@ export class MainServer extends OvernightJs.Server {
     this.addControllers([
       forecastController
     ]);
+  }
+
+  public getApp(): Application {
+    return this.app;
   }
 }
