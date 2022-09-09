@@ -17,7 +17,7 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "@src/*": ["./src/*"],
-      "@tests/*": ["tests/*"]
+      "@tests/*": ["./tests/*"]
     },
     "rootDirs": [
       "./src",
@@ -38,6 +38,6 @@
   ],
   "exclude": [
     "./node_modules/*",
-    "build"
+    "./build"
   ]
 }
