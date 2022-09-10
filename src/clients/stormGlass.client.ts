@@ -29,16 +29,10 @@ export class StormGlassClient {
       }));
   }
 
-  private isValidPoint(point: Partial<StormGlassPoint>): boolean {
-    return !!(
-      point.time &&
-      point.swellDirection?.[this.stormGlassApiSource] &&
-      point.swellHeight?.[this.stormGlassApiSource] &&
-      point.swellPeriod?.[this.stormGlassApiSource] &&
-      point.waveDirection?.[this.stormGlassApiSource] &&
-      point.waveHeight?.[this.stormGlassApiSource] &&
-      point.windDirection?.[this.stormGlassApiSource] &&
-      point.windSpeed?.[this.stormGlassApiSource]
-    );
+  private isValidPoint({ time, ...props }: Partial<StormGlassPoint>): boolean {
+    const pointValues: StormGlassPointSource[] = Object.values(props);
+    const pointPropsHasNoaa: boolean = pointValues.every((prop: StormGlassPointSource): boolean => !!prop[this.stormGlassApiSource]);
+
+    return time && pointPropsHasNoaa;
   }
 }
