@@ -1,2 +1,4 @@
+import type { SuperTest, Test } from 'supertest';
+
 /* eslint-disable */
-declare var testRequest: import('supertest').SuperTest<import('supertest').Test>;
+declare var testRequest: SuperTest<Test>;
