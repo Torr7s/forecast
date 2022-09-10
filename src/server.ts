@@ -8,7 +8,7 @@ import { ForecastController } from './controllers/forecast.controller';
 export class MainServer extends Server {
   constructor(private port: number = 3000) {
     super();
-  };
+  }
 
   public initialize(): void {
     this.setupExpress();
