@@ -1,7 +1,7 @@
 import { AxiosResponse, AxiosStatic } from 'axios';
 
 export class StormGlassClient {
-  readonly stormGlassApiUrl: string = 'https://api.stormglass.io/v2/'
+  readonly stormGlassApiUrl: string = 'https://api.stormglass.io/v2/';
   readonly stormGlassApiParams: string = 'swellDirection,swellHeight,swellPeriod,waveDirection,waveHeight,windDirection,windSpeed';
   readonly stormGlassApiSource: string = 'noaa';
 
