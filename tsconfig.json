@@ -12,6 +12,10 @@
     "resolveJsonModule": true,
     "strict": false,
     "skipLibCheck": true,
+    "typeRoots": [
+      "./src/typings",
+      "node_modules/@types"
+    ],
     "removeComments": true,
     "noImplicitReturns": true,
     "esModuleInterop": true,
