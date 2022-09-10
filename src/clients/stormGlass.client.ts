@@ -9,6 +9,6 @@ export class StormGlassClient {
   public async fetchPoints(lat: number, lng: number): Promise<AxiosResponse> {
     const url: string = `https://api.stormglass.io/v2/weather/point?lat=${lat}&lng=${lng}&params=${this.stormGlassApiParams}&source=${this.stormGlassApiSource}&end=1592113802`;
 
-    return this.request.get(url)
+    return this.request.get(url);
   }
 }
