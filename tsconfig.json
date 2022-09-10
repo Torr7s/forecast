@@ -6,31 +6,31 @@
     "lib": [
       "es6"
     ],
-    "allowSyntheticDefaultImports": true,
     "sourceMap": true,
-    "outDir": "build",
-    "baseUrl": "./",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     "allowJs": true,
+    "outDir": "build",
+    "resolveJsonModule": true,
+    "strict": false,
+    "skipLibCheck": true,
     "removeComments": true,
-    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "esModuleInterop": true,
+    "baseUrl": "./",
+    "allowSyntheticDefaultImports": true,
     "paths": {
-      "@src/*": ["./src/*"],
-      "@tests/*": ["./tests/*"]
+      "@src/*": [
+        "./src/*"
+      ],
+      "@tests/*": [
+        "./tests/*"
+      ]
     },
     "rootDirs": [
       "./src",
       "./tests"
     ],
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "strict": false,
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "noImplicitReturns": true,
-    "skipLibCheck": true
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": [
     "./src/**/*.ts",
