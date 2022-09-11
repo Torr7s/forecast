@@ -16,7 +16,7 @@ describe('StormGlass Client', (): void => {
 
     mockedAxios.get.mockResolvedValue({ data: stormGlassWeather3HoursFixture });
 
-    const stormGlass: StormGlassClient = new StormGlassClient(axios);
+    const stormGlass: StormGlassClient = new StormGlassClient(mockedAxios);
     const response: NormalizedForecastPoint[] = await stormGlass.fetchPoints(lat, lng);
 
     expect(response).toEqual(stormGlassNormalized3HoursFixtures);
