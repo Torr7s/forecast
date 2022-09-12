@@ -15,13 +15,20 @@ export class StormGlassClient {
   }
 
   private normalizeResponse(points: StormGlassForecastResponse): NormalizedForecastPoint[] {
-    return points.hours
+    const pointParams: string[] = ['time', ...this.stormGlassApiParams.split(',')]
+
+    const validPoints: (any | StormGlassPoint)[] = points
+      .hours
+      .map((point: StormGlassPoint): any | StormGlassPoint =>
+        !pointParams.every((key: string): any => point[key]) ? [] : point)
+
+    return validPoints
       .filter(this.isValidPoint.bind(this))
       .map((point: StormGlassPoint) => ({
+        time: point.time,
         swellDirection: point.swellDirection[this.stormGlassApiSource],
         swellHeight: point.swellHeight[this.stormGlassApiSource],
         swellPeriod: point.swellPeriod[this.stormGlassApiSource],
-        time: point.time,
         waveDirection: point.waveDirection[this.stormGlassApiSource],
         waveHeight: point.waveHeight[this.stormGlassApiSource],
         windDirection: point.windDirection[this.stormGlassApiSource],
