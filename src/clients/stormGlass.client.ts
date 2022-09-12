@@ -1,5 +1,7 @@
 import { AxiosResponse, AxiosStatic } from 'axios';
 
+import { ClientRequestError } from '@src/shared/utils/errors/stormGlass/client-request.error';
+
 export class StormGlassClient {
   readonly stormGlassApiUrl: string = 'https://api.stormglass.io/v2/';
   readonly stormGlassApiParams: string = 'swellDirection,swellHeight,swellPeriod,waveDirection,waveHeight,windDirection,windSpeed';
@@ -8,10 +10,14 @@ export class StormGlassClient {
   constructor(protected request: AxiosStatic) { };
 
   public async fetchPoints(lat: number, lng: number): Promise<NormalizedForecastPoint[]> {
-    const url: string = `${this.stormGlassApiUrl}/weather/point?lat=${lat}&lng=${lng}&params=${this.stormGlassApiParams}&source=${this.stormGlassApiSource}`;
-    const response: AxiosResponse<StormGlassForecastResponse> = await this.request.get<StormGlassForecastResponse>(url);
+    try {
+      const url: string = `${this.stormGlassApiUrl}/weather/point?lat=${lat}&lng=${lng}&params=${this.stormGlassApiParams}&source=${this.stormGlassApiSource}`;
+      const response: AxiosResponse<StormGlassForecastResponse> = await this.request.get<StormGlassForecastResponse>(url);
 
-    return this.normalizeResponse(response.data);
+      return this.normalizeResponse(response.data);
+    } catch (error) {
+      throw new ClientRequestError(error);
+    }
   }
 
   private normalizeResponse(points: StormGlassForecastResponse): NormalizedForecastPoint[] {
