@@ -59,4 +59,28 @@ describe('StormGlass Client', (): void => {
         'Unexpected error when trying to communicate to StormGlass: "Network Error"'
       );
   });
+
+  it('should get an StormGlassResponseError when the StormGlass service responds with an error', async (): Promise<void> => {
+    const lat = -33.792726;
+    const lng = 151.289824;
+
+    mockedAxios.get.mockRejectedValue({
+      response: {
+        status: 429,
+        data: {
+          errors: [
+            'Too Many Requests'
+          ]
+        }
+      }
+    });
+
+    const stormGlass: StormGlassClient = new StormGlassClient(mockedAxios);
+
+    await expect(stormGlass.fetchPoints(lat, lng))
+      .rejects
+      .toThrow(
+        'Unexpected error returned by the StormGlass service: Error: {"errors":["Too Many Requests"]} Code: 429'
+      );
+  });
 });
