@@ -1,6 +1,7 @@
-import { AxiosResponse, AxiosStatic } from 'axios';
+import { AxiosError, AxiosResponse, AxiosStatic } from 'axios';
 
 import { ClientRequestError } from '@src/shared/utils/errors/stormGlass/client-request.error';
+import { StormGlassResponseError } from '@src/shared/utils/errors/stormGlass/response.error';
 
 export class StormGlassClient {
   readonly stormGlassApiUrl: string = 'https://api.stormglass.io/v2/';
@@ -16,6 +17,14 @@ export class StormGlassClient {
 
       return this.normalizeResponse(response.data);
     } catch (error) {
+      const axiosError: AxiosError = error as AxiosError;
+
+      if (axiosError.response && axiosError.response.status) {
+        throw new StormGlassResponseError(
+          `Error: ${JSON.stringify(axiosError.response.data)} Code: ${axiosError.response.status}`
+        );
+      }
+
       throw new ClientRequestError(error);
     }
   }
