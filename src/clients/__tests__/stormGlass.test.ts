@@ -1,22 +1,27 @@
-import axios, { AxiosStatic } from 'axios';
+import * as HTTPUtil from '@src/shared/utils/request';
 
 import { StormGlassClient } from '../stormGlass.client';
 
 import stormGlassWeather3HoursFixture from '@tests/fixtures/stormglass_weather_3_hours.json';
 import stormGlassNormalized3HoursFixtures from '@tests/fixtures/stormglass_normalized_response_3_hours.json';
 
-jest.mock('axios');
+jest.mock('@src/shared/utils/request');
 
 describe('StormGlass Client', (): void => {
-  const mockedAxios: jest.Mocked<AxiosStatic> = axios as jest.Mocked<typeof axios>;
+  const MockedRequestClass = HTTPUtil.Request as jest.Mocked<
+    typeof HTTPUtil.Request
+  >;
+
+  const mockedRequest = new HTTPUtil.Request() as jest.Mocked<HTTPUtil.Request>;
 
   it('should return the normalized forecast from the StormGlass service', async (): Promise<void> => {
     const lat: number = -33.792726;
     const lng: number = 151.289824;
 
-    mockedAxios.get.mockResolvedValue({ data: stormGlassWeather3HoursFixture });
+    mockedRequest.get.mockResolvedValue({ data: stormGlassWeather3HoursFixture } as HTTPUtil.Response);
 
-    const stormGlass: StormGlassClient = new StormGlassClient(mockedAxios);
+    const stormGlass: StormGlassClient = new StormGlassClient();
+    // ClientRequestError: Unexpected error when trying to communicate to StormGlass: "TypeError: Cannot read properties of undefined (reading 'data')"
     const response: NormalizedForecastPoint[] = await stormGlass.fetchPoints(lat, lng);
 
     expect(response).toEqual(stormGlassNormalized3HoursFixtures);
@@ -37,9 +42,9 @@ describe('StormGlass Client', (): void => {
       ]
     }
 
-    mockedAxios.get.mockResolvedValue({ data: incompleteResponse });
+    mockedRequest.get.mockResolvedValue({ data: incompleteResponse } as HTTPUtil.Response);
 
-    const stormGlass: StormGlassClient = new StormGlassClient(mockedAxios);
+    const stormGlass: StormGlassClient = new StormGlassClient(mockedRequest);
     const response: NormalizedForecastPoint[] = await stormGlass.fetchPoints(lat, lng);
 
     expect(response).toEqual([]);
@@ -49,9 +54,9 @@ describe('StormGlass Client', (): void => {
     const lat = -33.792726;
     const lng = 151.289824;
 
-    mockedAxios.get.mockRejectedValue('Network Error');
+    mockedRequest.get.mockRejectedValue('Network Error');
 
-    const stormGlass: StormGlassClient = new StormGlassClient(mockedAxios);
+    const stormGlass: StormGlassClient = new StormGlassClient(mockedRequest);
 
     await expect(stormGlass.fetchPoints(lat, lng))
       .rejects
@@ -64,7 +69,9 @@ describe('StormGlass Client', (): void => {
     const lat = -33.792726;
     const lng = 151.289824;
 
-    mockedAxios.get.mockRejectedValue({
+    MockedRequestClass.isRequestError.mockReturnValue(true);
+
+    mockedRequest.get.mockRejectedValue({
       response: {
         status: 429,
         data: {
@@ -75,7 +82,7 @@ describe('StormGlass Client', (): void => {
       }
     });
 
-    const stormGlass: StormGlassClient = new StormGlassClient(mockedAxios);
+    const stormGlass: StormGlassClient = new StormGlassClient(mockedRequest);
 
     await expect(stormGlass.fetchPoints(lat, lng))
       .rejects
