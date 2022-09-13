@@ -1,4 +1,9 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, AxiosStatic } from 'axios';
+import axios, { 
+  AxiosError, 
+  AxiosRequestConfig, 
+  AxiosResponse, 
+  AxiosStatic 
+} from 'axios';
 
 export interface RequestConfig extends AxiosRequestConfig {};
 export interface Response<T = any> extends AxiosResponse<T> {};
