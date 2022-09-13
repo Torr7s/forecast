@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import config, { IConfig } from 'config';
 
-import * as HTTPUtil from '@src/shared/utils/request';
+import { Request, Response } from '@src/shared/utils/request';
 
 import { ClientRequestError } from '@src/shared/utils/errors/stormGlass/client-request.error';
 import { StormGlassResponseError } from '@src/shared/utils/errors/stormGlass/response.error';
@@ -12,7 +12,7 @@ export class StormGlassClient {
   readonly stormGlassApiParams: string = 'swellDirection,swellHeight,swellPeriod,waveDirection,waveHeight,windDirection,windSpeed';
   readonly stormGlassApiSource: string = 'noaa';
 
-  constructor(protected request: HTTPUtil.Request = new HTTPUtil.Request()) { };
+  constructor(protected request: Request = new Request()) { };
 
   public async fetchPoints(lat: number, lng: number): Promise<NormalizedForecastPoint[]> {
     try {
@@ -20,9 +20,9 @@ export class StormGlassClient {
         'apiUrl'
       )}/weather/point?lat=${lat}&lng=${lng}&params=${this.stormGlassApiParams}&source=${this.stormGlassApiSource}`;
 
-      const response: HTTPUtil.Response<StormGlassForecastResponse> = await this.request.get<StormGlassForecastResponse>(url, {
+      const response: Response<StormGlassForecastResponse> = await this.request.get<StormGlassForecastResponse>(url, {
         headers: {
-          'Authorization': stormGlassResourceConfig.get('apiToken')
+          Authorization: stormGlassResourceConfig.get('apiToken')
         }
       });
 
@@ -30,11 +30,8 @@ export class StormGlassClient {
     } catch (error) {
       const axiosError: AxiosError = error as AxiosError;
 
-      if (HTTPUtil.Request.isRequestError(axiosError)) {
-        throw new StormGlassResponseError(
-          `Error: ${JSON.stringify(axiosError.response.data)} Code: ${axiosError.response.status}`
-        );
-      }
+      if (Request.isRequestError(axiosError))
+        throw new StormGlassResponseError(axiosError);
 
       throw new ClientRequestError(error);
     }
@@ -63,9 +60,8 @@ export class StormGlassClient {
   }
 
   private isValidPoint({ time, ...props }: Partial<StormGlassPoint>): boolean {
-    const pointValues: StormGlassPointSource[] = Object.values(props);
-    const pointPropsHasNoaa: boolean = pointValues.every((prop: StormGlassPointSource): boolean => !!prop[this.stormGlassApiSource]);
+    const validPropsWithNoaa: boolean = Object.values(props).every((prop: StormGlassPointSource): boolean => !!prop[this.stormGlassApiSource]);
 
-    return time && pointPropsHasNoaa;
+    return time && validPropsWithNoaa;
   }
 }
