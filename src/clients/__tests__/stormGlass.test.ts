@@ -1,30 +1,33 @@
-import * as HTTPUtil from '@src/shared/utils/request';
+import { Request, Response } from '@src/shared/utils/request';
 
 import { StormGlassClient } from '../stormGlass.client';
 
 import stormGlassWeather3HoursFixture from '@tests/fixtures/stormglass_weather_3_hours.json';
-import stormGlassNormalized3HoursFixtures from '@tests/fixtures/stormglass_normalized_response_3_hours.json';
+import stormGlassNormalized3HoursFixture from '@tests/fixtures/stormglass_normalized_response_3_hours.json';
 
 jest.mock('@src/shared/utils/request');
 
 describe('StormGlass Client', (): void => {
-  const MockedRequestClass = HTTPUtil.Request as jest.Mocked<
-    typeof HTTPUtil.Request
+  const MockedRequestClass = Request as jest.Mocked<
+    typeof Request
   >;
 
-  const mockedRequest = new HTTPUtil.Request() as jest.Mocked<HTTPUtil.Request>;
+  /**
+   * typeof has been removed because HTTP.Request is a class instance, not 
+   * the class itself
+   */
+  const mockedRequest = new Request() as jest.Mocked<Request>;
 
   it('should return the normalized forecast from the StormGlass service', async (): Promise<void> => {
     const lat: number = -33.792726;
     const lng: number = 151.289824;
 
-    mockedRequest.get.mockResolvedValue({ data: stormGlassWeather3HoursFixture } as HTTPUtil.Response);
+    mockedRequest.get.mockResolvedValue({ data: stormGlassWeather3HoursFixture } as Response);
 
-    const stormGlass: StormGlassClient = new StormGlassClient();
-    // ClientRequestError: Unexpected error when trying to communicate to StormGlass: "TypeError: Cannot read properties of undefined (reading 'data')"
+    const stormGlass: StormGlassClient = new StormGlassClient(mockedRequest);
     const response: NormalizedForecastPoint[] = await stormGlass.fetchPoints(lat, lng);
 
-    expect(response).toEqual(stormGlassNormalized3HoursFixtures);
+    expect(response).toEqual(stormGlassNormalized3HoursFixture);
   });
 
   it('should exclude incomplete data points', async (): Promise<void> => {
@@ -42,7 +45,7 @@ describe('StormGlass Client', (): void => {
       ]
     }
 
-    mockedRequest.get.mockResolvedValue({ data: incompleteResponse } as HTTPUtil.Response);
+    mockedRequest.get.mockResolvedValue({ data: incompleteResponse } as Response);
 
     const stormGlass: StormGlassClient = new StormGlassClient(mockedRequest);
     const response: NormalizedForecastPoint[] = await stormGlass.fetchPoints(lat, lng);
@@ -87,7 +90,7 @@ describe('StormGlass Client', (): void => {
     await expect(stormGlass.fetchPoints(lat, lng))
       .rejects
       .toThrow(
-        'Unexpected error returned by the StormGlass service: Error: {"errors":["Too Many Requests"]} Code: 429'
+        'Unexpected error returned by the StormGlass service: "Error: {"errors":["Too Many Requests"]} Code: 429"'
       );
   });
 });
