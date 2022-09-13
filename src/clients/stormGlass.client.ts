@@ -28,10 +28,8 @@ export class StormGlassClient {
 
       return this.normalizeResponse(response.data);
     } catch (error) {
-      const axiosError: AxiosError = error as AxiosError;
-
-      if (Request.isRequestError(axiosError))
-        throw new StormGlassResponseError(axiosError);
+      if (Request.isRequestError(error))
+        throw new StormGlassResponseError(error);
 
       throw new ClientRequestError(error);
     }
