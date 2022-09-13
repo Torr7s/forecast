@@ -26,7 +26,9 @@ export class StormGlassClient {
         }
       });
 
-      return this.normalizeResponse(response.data);
+      const normalizedResponse: NormalizedForecastPoint[] = this.normalizeResponse(response.data);
+
+      return normalizedResponse;
     } catch (error) {
       if (Request.isRequestError(error))
         throw new StormGlassResponseError(error);
