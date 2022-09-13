@@ -12,7 +12,7 @@ export class StormGlassClient {
   readonly stormGlassApiParams: string = 'swellDirection,swellHeight,swellPeriod,waveDirection,waveHeight,windDirection,windSpeed';
   readonly stormGlassApiSource: string = 'noaa';
 
-  constructor(protected request: Request = new Request()) { };
+  constructor(protected request: Request = new Request()) {};
 
   public async fetchPoints(lat: number, lng: number): Promise<NormalizedForecastPoint[]> {
     try {
