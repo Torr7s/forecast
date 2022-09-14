@@ -18,28 +18,33 @@ export class ForecastService {
 
       for (const beach of beaches) {
         const points: NormalizedForecastPoint[] = await this.stormGlass.fetchPoints(beach.lat, beach.lng);
-  
-        const enrichedBeachData: BeachForecast[] = points
-          .map((point: NormalizedForecastPoint): BeachForecast => ({
-            ...{
-              name: beach.name,
-              lat: beach.lat,
-              lng: beach.lng,
-              position: beach.position,
-              rating: 1
-            },
-            ...point
-          }));
-  
+        const enrichedBeachData: BeachForecast[] = this.enrichBeachData(beach, points);
+
         pointsWithCorrectSources.push(...enrichedBeachData);
       }
-  
+
       const mappedForecast: TimeForecast[] = this.mapForecastByTime(pointsWithCorrectSources);
-  
+
       return mappedForecast;
     } catch (error) {
       throw new ForecastProcessingInternalError((error as Error).message);
     }
+  }
+
+  private enrichBeachData(beach: Beach, points: NormalizedForecastPoint[]): BeachForecast[] {
+    const enrichedBeachData: BeachForecast[] = points
+      .map((point: NormalizedForecastPoint): BeachForecast => ({
+        ...{
+          name: beach.name,
+          lat: beach.lat,
+          lng: beach.lng,
+          position: beach.position,
+          rating: 1
+        },
+        ...point
+      }));
+
+    return enrichedBeachData;
   }
 
   private mapForecastByTime(forecast: BeachForecast[]): TimeForecast[] {
