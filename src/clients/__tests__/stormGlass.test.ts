@@ -5,6 +5,8 @@ import { StormGlassClient } from '../stormGlass.client';
 import stormGlassWeather3HoursFixture from '@tests/fixtures/stormglass_weather_3_hours.json';
 import stormGlassNormalized3HoursFixture from '@tests/fixtures/stormglass_normalized_response_3_hours.json';
 
+import { NormalizedForecastPoint } from '@src/typings';
+
 jest.mock('@src/shared/utils/request');
 
 describe('StormGlass Client', (): void => {

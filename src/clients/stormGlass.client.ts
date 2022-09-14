@@ -5,6 +5,13 @@ import { Request, Response } from '@src/shared/utils/request';
 import { ClientRequestError } from '@src/shared/utils/errors/stormGlass/client-request.error';
 import { StormGlassResponseError } from '@src/shared/utils/errors/stormGlass/response.error';
 
+import { 
+  NormalizedForecastPoint, 
+  StormGlassForecastResponse, 
+  StormGlassPoint, 
+  StormGlassPointSource 
+} from '@src/typings';
+
 const stormGlassResourceConfig: IConfig = config.get('app.resources.stormGlass');
 
 export class StormGlassClient {
