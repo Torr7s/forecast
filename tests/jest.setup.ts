@@ -1,13 +1,15 @@
-import { Application } from 'express';
 import supertest from 'supertest';
 
 import { MainServer } from '@src/server';
 
-beforeAll((): void => {
-  const server: MainServer = new MainServer();
-  server.initialize();
+let server: MainServer;
 
-  const app: Application = server.getApp();
+/* Facing a jest issue: "Exceeded timeout of 5000 ms for a hook." */
+beforeAll(async (): Promise<void> => {
+  server = new MainServer();
+  await server.initialize();
 
-  global.testRequest = supertest(app);
+  global.testRequest = supertest(server.getApp());
 });
+
+afterAll(async(): Promise<void> => await server.close());
