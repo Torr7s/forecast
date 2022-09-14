@@ -89,10 +89,11 @@ describe('StormGlass Client', (): void => {
 
     const stormGlass: StormGlassClient = new StormGlassClient(mockedRequest);
 
-    await expect(stormGlass.fetchPoints(lat, lng))
-      .rejects
-      .toThrow(
-        'Unexpected error returned by the StormGlass service: "Error: {"errors":["Too Many Requests"]} Code: 429"'
-      );
+    expect(async (): Promise<void> => {
+      await stormGlass.fetchPoints(
+        lat,
+        lng
+      )
+    }).rejects.toThrow(`Unexpected error returned by the StormGlass service: "Error: {"errors":["Too Many Requests"]} Code: 429"`);
   });
 });
