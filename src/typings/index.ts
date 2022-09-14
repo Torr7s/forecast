@@ -1,8 +1,8 @@
-interface StormGlassPointSource {
+export interface StormGlassPointSource {
   [key: string]: number;
 }
 
-interface StormGlassPoint {
+export interface StormGlassPoint {
   readonly time: string;
   readonly waveHeight: StormGlassPointSource;
   readonly waveDirection: StormGlassPointSource;
@@ -13,11 +13,11 @@ interface StormGlassPoint {
   readonly windSpeed: StormGlassPointSource;
 }
 
-interface StormGlassForecastResponse {
+export interface StormGlassForecastResponse {
   hours: StormGlassPoint[];
 }
 
-interface NormalizedForecastPoint {
+export interface NormalizedForecastPoint {
   time: string;
   waveHeight: number;
   waveDirection: number;
@@ -27,3 +27,20 @@ interface NormalizedForecastPoint {
   windDirection: number;
   windSpeed: number;
 }
+
+export enum BeachPosition {
+  S = 'South',
+  E = 'East',
+  W = 'West',
+  N = 'North'
+}
+
+export interface Beach {
+  name: string;
+  position: BeachPosition;
+  lat: number;
+  lng: number;
+  user: string;
+}
+
+export interface BeachForecast extends Omit<Beach, 'user'>, NormalizedForecastPoint {}
