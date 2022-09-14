@@ -1,10 +1,10 @@
 {
-  "name": "node-typescript-api",
+  "name": "beach-forecast-api",
   "author": {
     "email": "torr7s.contact@gmail.com",
     "name": "Matheus Torres"
   },
-  "description": "Api to calculate the best surfing condition between beaches",
+  "description": "Api to calculate the best surfing condition among several beaches",
   "version": "1.0.0",
   "license": "MIT",
   "main": "build/index.js",
