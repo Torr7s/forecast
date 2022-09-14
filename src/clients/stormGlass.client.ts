@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios';
 import config, { IConfig } from 'config';
 
 import { Request, Response } from '@src/shared/utils/request';
