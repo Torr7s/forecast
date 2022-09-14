@@ -3,7 +3,7 @@ import './shared/utils/module-alias';
 import express, { Application } from 'express';
 import { Server } from '@overnightjs/core';
 
-import { closeDb, connectDb } from './database';
+import * as database from './database';
 import { ForecastController } from './controllers/forecast.controller';
 
 export class MainServer extends Server {
@@ -36,12 +36,12 @@ export class MainServer extends Server {
   }
 
   private async databaseSetup(): Promise<void> {
-    await connectDb();
+    database.connect();
   }
 
   /* Will close the whole app */
   public async close(): Promise<void> {
-    await closeDb();
+    await database.close();
   }
 
   public getApp(): Application {
