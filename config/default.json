@@ -1,7 +1,7 @@
 {
   "app": {
     "database": {
-      "mongoUrl": "mongodb://localhost:27017/surf-forecast"
+      "mongoUrl": ".env-url"
     },
     "resources": {
       "stormGlass": {
