@@ -4,7 +4,12 @@ import { MainServer } from '@src/server';
 
 let server: MainServer;
 
-/* Facing a jest issue: "Exceeded timeout of 5000 ms for a hook." */
+/**
+ * Current errors being faced when using "yarn test:func"
+ * 
+ * 1. "connect ECONNREFUSED 127.0.0.1:80"
+ * 2. "Exceeded timeout of 5000 ms for a hook."
+*/
 beforeAll(async (): Promise<void> => {
   server = new MainServer();
   await server.initialize();
