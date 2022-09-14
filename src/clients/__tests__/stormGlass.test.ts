@@ -42,7 +42,7 @@ describe('StormGlass Client', (): void => {
           windDirection: {
             noaa: 300,
           },
-          time: '2020-04-26T00:00:00+00:00'
+          time: '2022-09-10T00:00:00+00:00'
         }
       ]
     }
