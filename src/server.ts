@@ -3,7 +3,7 @@ import './shared/utils/module-alias';
 import express, { Application } from 'express';
 import { Server } from '@overnightjs/core';
 
-import * as database from './database';
+import * as database from './shared/database';
 
 import { ForecastController } from './controllers/forecast.controller';
 import { BeachesController } from './controllers/beaches.controller';
