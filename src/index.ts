@@ -1,3 +1,6 @@
+import 'dotenv/config';
+import './shared/utils/module-alias';
+
 import { MainServer } from './server';
 
 import config from 'config';
