@@ -8,7 +8,7 @@
     ],
     "sourceMap": true,
     "allowJs": true,
-    "outDir": "build",
+    "outDir": "dist",
     "resolveJsonModule": true,
     "strict": false,
     "skipLibCheck": true,
@@ -19,7 +19,7 @@
     "removeComments": true,
     "noImplicitReturns": true,
     "esModuleInterop": true,
-    "baseUrl": "./",
+    "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
     "paths": {
       "@src/*": [
@@ -42,6 +42,6 @@
   ],
   "exclude": [
     "./node_modules/*",
-    "./build"
+    "dist"
   ]
 }
