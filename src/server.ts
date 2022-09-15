@@ -48,6 +48,14 @@ export class MainServer extends Server {
     await database.close();
   }
 
+  public start(): void {
+    this.app.listen(this.port, (): void => {
+      console.info(
+        'Server listening on port ', this.port
+      );
+    });
+  }
+
   public getApp(): Application {
     return this.app;
   }
