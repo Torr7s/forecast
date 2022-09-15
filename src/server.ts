@@ -1,5 +1,3 @@
-import './shared/utils/module-alias';
-
 import express, { Application } from 'express';
 import { Server } from '@overnightjs/core';
 
