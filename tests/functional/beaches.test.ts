@@ -1,6 +1,4 @@
-import { Beach } from '@src/shared/database/models/beach.model';
-
-import { BeachPosition } from '@src/typings';
+import { Beach, BeachPosition } from '@src/shared/database/models/beach.model';
 
 describe('Beaches functional tests', (): void => {
   beforeAll(async (): Promise<any> => await Beach.deleteMany());
