@@ -40,8 +40,7 @@ describe('Beach forecast functional tests', (): void => {
 
     const { body, status } = await global.testRequest.get('/api/forecast');
 
-    expect(body).toEqual(apiForecastResponse1BeachFixture);
-
     expect(status).toBe(200);
+    expect(body).toEqual(apiForecastResponse1BeachFixture);
   });
 });
