@@ -28,7 +28,7 @@ export class StormGlassClient {
 
       const response: Response<StormGlassForecastResponse> = await this.request.get<StormGlassForecastResponse>(url, {
         headers: {
-          Authorization: stormGlassResourceConfig.get('apiToken')
+          Authorization: `${process.env.STORMGLASS_API_KEY as string}`
         }
       });
 
