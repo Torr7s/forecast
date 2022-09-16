@@ -34,4 +34,4 @@ const userSchema = new mongoose.Schema<User>({
 
 export interface UserModel extends Omit<User, '_id'>, Document {}
 
-export const User: Model<UserModel> = mongoose.model<UserModel>('users', userSchema);
+export const User: Model<UserModel> = mongoose.model<UserModel>('User', userSchema);
