@@ -1,8 +1,13 @@
 {
   "app": {
+    "port": 3000,
+    "database": {
+      "mongoUrl": ".env-url"
+    },
     "resources": {
       "stormGlass": {
-        "apiToken": "test-token"
+        "apiUrl": "https://api.stormglass.io/v2",
+        "apiToken": "do-not-hard-code"
       }
     }
   }
