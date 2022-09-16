@@ -38,7 +38,7 @@ export class MainServer extends Server {
   }
 
   private async databaseSetup(): Promise<void> {
-    database.connect();
+    await database.connect();
   }
 
   /* Will close the whole app */
