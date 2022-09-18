@@ -38,10 +38,10 @@ describe('Users functional tests', (): void => {
         password: 'youshallnotpass'
       }
 
-      const response = await global.testRequest.post('/api/users').send(newUser);
+      const { body, status } = await global.testRequest.post('/api/users').send(newUser);
 
-      expect(response.status).toBe(422);
-      expect(response.body).toEqual({
+      expect(status).toBe(422);
+      expect(body).toEqual({
         code: 422,
         error:
           'User validation failed: name: Path `name` is required.'
@@ -57,13 +57,13 @@ describe('Users functional tests', (): void => {
 
       await global.testRequest.post('/api/users').send(newUser);
 
-      const response = await global.testRequest.post('/api/users').send(newUser);
+      const { body, status } = await global.testRequest.post('/api/users').send(newUser);
 
-      expect(response.status).toBe(409);
-      expect(response.body).toEqual({
+      expect(status).toBe(409);
+      expect(body).toEqual({
         code: 409,
         error: 'User validation failed: email: already exists in the database.'
       });
     });
-  })
+  });
 });
