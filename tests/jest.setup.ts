@@ -5,7 +5,7 @@ import { MainServer } from '@src/server';
 let server: MainServer;
 
 beforeAll(async (): Promise<void> => {
-  server = new MainServer();
+  server = new MainServer(4000);
   await server.initialize();
 
   global.testRequest = supertest(server.getApp());
