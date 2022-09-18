@@ -11,7 +11,7 @@ import {
 } from '@src/typings';
 
 export class ForecastService {
-  constructor(protected stormGlass: StormGlassClient = new StormGlassClient()) { };
+  constructor(protected stormGlass: StormGlassClient = new StormGlassClient()) {};
 
   public async processForecastForBeaches(beaches: Beach[]): Promise<TimeForecast[]> {
     try {
