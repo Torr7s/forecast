@@ -3,10 +3,8 @@ import './shared/utils/module-alias';
 
 import { MainServer } from './server';
 
-import config from 'config';
-
 (async(): Promise<void> => {
-  const server: MainServer = new MainServer(config.get('app.port'));
+  const server: MainServer = new MainServer();
   await server.initialize();
 
   server.start();
