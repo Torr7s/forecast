@@ -66,4 +66,53 @@ describe('Users functional tests', (): void => {
       });
     });
   });
+
+  describe('When authenticating a user', (): void => {
+    it('should generate a token for a valid user', async (): Promise<void> => {
+      const newUser = {
+        name: 'John Doe',
+        email: 'johndoe@gmail.com',
+        password: 'youshallnotpass',
+      }
+
+      await new User(newUser).save();
+
+      const { body } = await global.testRequest.post('/api/users/auth').send({
+        email: newUser.email,
+        password: newUser.password
+      });
+
+      expect(body).toEqual(
+        expect.objectContaining({
+          token: expect.any(String)
+        })
+      );
+    });
+
+    it('should return UNAUTHORIZED if the given email was not found', async (): Promise<void> => {
+      const { status } = await global.testRequest.post('/api/users/auth').send({
+        email: 'fakeemail@yahoo.com',
+        password: 'youshallnotpass'
+      });
+
+      expect(status).toBe(401)
+    });
+
+    it('should return UNAUTHORIZED if the password is invalid', async (): Promise<void> => {
+      const newUser = {
+        name: 'John Doe',
+        email: 'johndoe@gmail.com',
+        password: 'youshallnotpass',
+      }
+
+      await new User(newUser).save();
+
+      const { status } = await global.testRequest.post('/api/users/auth').send({
+        email: newUser.password,
+        password: '123'
+      });
+
+      expect(status).toBe(401);
+    });
+  });
 });
