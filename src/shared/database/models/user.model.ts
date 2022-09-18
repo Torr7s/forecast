@@ -1,5 +1,7 @@
 import mongoose, { Document, Model } from 'mongoose';
 
+import { AuthProvider } from '@src/shared/container/providers/auth/auth.provider';
+
 export enum CUSTOM_VALIDATION {
   DUPLICATED = 'DUPLICATED'
 }
@@ -11,7 +13,9 @@ export interface User {
   password: string;
 }
 
-const userSchema = new mongoose.Schema<User>({
+export interface UserModel extends Omit<User, '_id'>, Document {}
+
+const userSchema = new mongoose.Schema<UserModel>({
   name: {
     type: String,
     required: true
@@ -45,6 +49,18 @@ userSchema.path('email').validate(async (email: string): Promise<boolean> => {
   CUSTOM_VALIDATION.DUPLICATED
 );
 
-export interface UserModel extends Omit<User, '_id'>, Document {}
+userSchema.pre<UserModel>('save', async function (): Promise<void> {
+  if (!this.password || !this.isModified('password')) return;
+
+  try {
+    const hashedPassword: string = await AuthProvider.hashPassword(this.password);
+
+    this.password = hashedPassword;
+  } catch (error) {
+    console.error(
+      `Error while trying to hash password for user ${this.name}.`
+    )
+  }
+});
 
 export const User: Model<UserModel> = mongoose.model<UserModel>('User', userSchema);
