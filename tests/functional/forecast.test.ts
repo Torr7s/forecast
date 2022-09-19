@@ -29,7 +29,7 @@ describe('Beach forecast functional tests', (): void => {
       user: user.id
     }
 
-    const beach: BeachModel = await new Beach(defaultBeach).save();
+    await new Beach(defaultBeach).save();
   });
 
   it('should return a forecast with just a few times', async (): Promise<void> => {
