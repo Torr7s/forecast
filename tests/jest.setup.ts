@@ -1,6 +1,6 @@
 import supertest from 'supertest';
 
-import { MainServer } from '@src/server';
+import { MainServer } from '@src/shared/infra/http/server';
 
 let server: MainServer;
 
