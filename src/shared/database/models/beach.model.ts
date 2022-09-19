@@ -1,4 +1,4 @@
-import mongoose, { Document, Model } from 'mongoose';
+import mongoose, { Document, Model, Schema } from 'mongoose';
 
 export enum BeachPosition {
   S = 'South',
@@ -13,6 +13,7 @@ export interface Beach {
   position: BeachPosition;
   lat: number;
   lng: number;
+  user: Schema.Types.ObjectId
 }
 
 const beachSchema = new mongoose.Schema<Beach>({
@@ -31,6 +32,11 @@ const beachSchema = new mongoose.Schema<Beach>({
   },
   lng: {
     type: Number,
+    required: true
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
     required: true
   }
 }, {
