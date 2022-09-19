@@ -3,13 +3,14 @@ import { AuthMiddleware } from '../auth.middleware';
 
 describe('AuthMiddleware', (): void => {
   it('should verify a JWT token and call the next middleware', async (): Promise<void> => {
-    const jwtToken: string = AuthProvider.signToken({ data: 'fake' });
+    const jwtToken: string = AuthProvider.signToken('fake-user-id');
     
     const fakeRequest = {
       headers: {
         'x-access-token': jwtToken
       }
     }
+
     const fakeResponse = {};
     const fakeNext: jest.Mock = jest.fn();
 

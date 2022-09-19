@@ -47,7 +47,7 @@ export class UsersController extends BaseController {
         });
     };
 
-    const token: string = AuthProvider.signToken(user);
+    const token: string = AuthProvider.signToken(user.id);
 
     return response
       .status(200)

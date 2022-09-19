@@ -19,7 +19,7 @@ describe('Beaches functional tests', (): void => {
 
     user = await new User(defaultUser).save();
 
-    token = AuthProvider.signToken(user);
+    token = AuthProvider.signToken(user.id);
   });
 
   describe('When creating a beach', (): void => {
