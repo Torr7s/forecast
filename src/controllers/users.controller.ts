@@ -47,12 +47,12 @@ export class UsersController extends BaseController {
         });
     };
 
-    const token: string = AuthProvider.signToken(user.toJSON());
+    const token: string = AuthProvider.signToken(user);
 
     return response
       .status(200)
       .send({
         token
-      })
+      });
   }
 }
