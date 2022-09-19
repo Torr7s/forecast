@@ -1,6 +1,6 @@
 import nock from 'nock';
 
-import { Beach, BeachModel, BeachPosition } from '@src/shared/database/models/beach.model';
+import { Beach, BeachPosition } from '@src/shared/database/models/beach.model';
 import { User, UserModel } from '@src/shared/database/models/user.model';
 
 import apiForecastResponse1BeachFixture from '@tests/fixtures/api_forecast_response_1_beach.json';
