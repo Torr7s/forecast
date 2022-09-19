@@ -1,4 +1,5 @@
 import { Beach } from '@src/shared/database/models/beach.model';
+import { User } from '@src/shared/database/models/user.model';
 
 export interface StormGlassPointSource {
   [key: string]: number;
