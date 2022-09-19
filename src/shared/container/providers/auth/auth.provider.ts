@@ -1,8 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-import { UserModel } from '@src/shared/database/models/user.model';
-
 interface JwtPayload { sub: string; }
 
 const md5HashKey: string = process.env.MD5_HASH_KEY;
@@ -16,9 +14,9 @@ export class AuthProvider {
     return bcrypt.compare(password, hashedPassword);
   }
 
-  public static signToken(user: UserModel): string {
+  public static signToken(userId: string): string {
     return jwt.sign({}, md5HashKey, {
-      subject: user.id,
+      subject: userId,
       expiresIn: '1d'
     });
   }
