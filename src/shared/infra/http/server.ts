@@ -1,11 +1,11 @@
 import express, { Application } from 'express';
 import { Server } from '@overnightjs/core';
 
-import * as database from './shared/database';
+import * as database from '../../database';
 
-import { BeachesController } from './controllers/beaches.controller';
-import { ForecastController } from './controllers/forecast.controller';
-import { UsersController } from './controllers/users.controller';
+import { BeachesController } from '../../../controllers/beaches.controller';
+import { ForecastController } from '../../../controllers/forecast.controller';
+import { UsersController } from '../../../controllers/users.controller';
 
 export class MainServer extends Server {
   constructor(private port: number = 3000) {
