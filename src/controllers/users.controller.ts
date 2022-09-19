@@ -36,7 +36,9 @@ export class UsersController extends BaseController {
         });
     }
 
-    if (!(await AuthProvider.comparePasswords(password, user.password))) {
+    const validPassword: boolean = await AuthProvider.comparePasswords(password, user.password);
+
+    if (!validPassword) {
       return response
         .status(401)
         .send({
