@@ -18,6 +18,7 @@
     "lint:fix": "eslint ./src ./tests --ext .ts --fix",
     "start": "yarn build && node dist/src/index.js",
     "start:dev": "tsnd --transpile-only --ignore-watch 'node_modules' --respawn 'src/index.ts'",
+    "test": "yarn test:func && yarn test:unit",
     "test:func": "dotenv -e .env -- jest --projects ./tests --runInBand",
     "test:unit": "dotenv -e .env -- jest"
   },
