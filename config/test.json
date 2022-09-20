@@ -1,0 +1,15 @@
+{
+  "app": {
+    "database": {
+      "mongoUrl": "mongo_url_test_connection"
+    },
+    "resources": {
+      "stormGlass": {
+        "apiToken": "stormglass_api_test_token"
+      }
+    },
+    "logger": {
+      "enabled": false
+    }
+  }
+}
