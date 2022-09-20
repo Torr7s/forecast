@@ -9,6 +9,8 @@ import { AuthMiddleware } from '@src/shared/infra/http/middlewares/auth.middlewa
 
 import { TimeForecast } from '@src/typings';
 
+import logger from '@src/logger';
+
 const forecastService = new ForecastService();
 
 @Controller('api/forecast')
@@ -23,6 +25,8 @@ export class ForecastController {
 
       return response.status(200).send(forecastData);
     } catch (error) {
+      logger.error(error);
+
       return response
         .status(500)
         .send({

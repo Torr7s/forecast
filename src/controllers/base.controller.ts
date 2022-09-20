@@ -3,6 +3,8 @@ import { Response } from 'express';
 
 import { CUSTOM_VALIDATION } from '@src/shared/infra/mongo/models/user.model';
 
+import logger from '@src/logger';
+
 interface ErrorResponse {
   code: number;
   error: string;
@@ -13,13 +15,15 @@ export abstract class BaseController {
     if (error instanceof mongoose.Error.ValidationError) {
       const { code, error: err }: ErrorResponse = this.handleClientErrors(error);
 
-      return this.createResponse(response, code, err);
+      return this.createErrorResponse(response, code, err);
     }
 
-    return this.createResponse(response, 500, 'Something went wrong');
+    logger.error(error);
+
+    return this.createErrorResponse(response, 500, 'Something went wrong');
   }
 
-  private createResponse(response: Response, code: number, error: string): Response {
+  private createErrorResponse(response: Response, code: number, error: string): Response {
     return response
       .status(code)
       .send({

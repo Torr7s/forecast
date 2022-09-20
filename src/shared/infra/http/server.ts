@@ -3,9 +3,11 @@ import { Server } from '@overnightjs/core';
 
 import * as database from '../mongo';
 
-import { BeachesController } from '../../../controllers/beaches.controller';
-import { ForecastController } from '../../../controllers/forecast.controller';
-import { UsersController } from '../../../controllers/users.controller';
+import { BeachesController } from '@src/controllers/beaches.controller';
+import { ForecastController } from '@src/controllers/forecast.controller';
+import { UsersController } from '@src/controllers/users.controller';
+
+import logger from '@src/logger';
 
 export class MainServer extends Server {
   constructor(private port: number = 3000) {
@@ -44,15 +46,14 @@ export class MainServer extends Server {
     await database.connect();
   }
 
-  /* Will close the whole app */
   public async close(): Promise<void> {
     await database.close();
   }
 
   public start(): void {
     this.app.listen(this.port, (): void => {
-      console.info(
-        'Server listening on port ', this.port
+      logger.info(
+        `Server listening on port ${this.port}`
       );
     });
   }

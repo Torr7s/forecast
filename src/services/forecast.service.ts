@@ -10,12 +10,17 @@ import {
   TimeForecast
 } from '@src/typings';
 
+import logger from '@src/logger';
+
 export class ForecastService {
   constructor(protected stormGlass: StormGlassClient = new StormGlassClient()) {};
 
   public async processForecastForBeaches(beaches: Beach[]): Promise<TimeForecast[]> {
+    const pointsWithCorrectSources: BeachForecast[] = [];
+    
+    logger.info(`Preparing the forecast for ${beaches.length} beaches`);
+
     try {
-      const pointsWithCorrectSources: BeachForecast[] = [];
 
       for (const beach of beaches) {
         const points: NormalizedForecastPoint[] = await this.stormGlass.fetchPoints(beach.lat, beach.lng);
@@ -28,6 +33,8 @@ export class ForecastService {
 
       return mappedForecast;
     } catch (error) {
+      logger.error(error);
+
       throw new ForecastProcessingInternalError((error as Error).message);
     }
   }

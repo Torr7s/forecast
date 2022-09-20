@@ -7,6 +7,8 @@ import { Beach, BeachModel } from '@src/shared/infra/mongo/models/beach.model';
 
 import { AuthMiddleware } from '@src/shared/infra/http/middlewares/auth.middleware';
 
+import logger from '@src/logger';
+
 @Controller('api/beaches')
 @ClassMiddleware(AuthMiddleware)
 export class BeachesController {
@@ -29,6 +31,8 @@ export class BeachesController {
             error: (error as Error).message
           });
       }
+
+      logger.error(error);
 
       return response
         .status(500)

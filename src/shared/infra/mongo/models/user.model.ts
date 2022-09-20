@@ -2,6 +2,8 @@ import mongoose, { Document, Model } from 'mongoose';
 
 import { AuthProvider } from '@src/shared/container/providers/auth/auth.provider';
 
+import logger from '@src/logger';
+
 export enum CUSTOM_VALIDATION {
   DUPLICATED = 'DUPLICATED'
 }
@@ -57,9 +59,7 @@ userSchema.pre<UserModel>('save', async function (): Promise<void> {
 
     this.password = hashedPassword;
   } catch (error) {
-    console.error(
-      `Error while trying to hash password for user ${this.name}.`
-    )
+    logger.error(`Error while trying to hash password for user ${this.name}.`, error);
   }
 });
 
