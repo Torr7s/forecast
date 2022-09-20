@@ -35,8 +35,8 @@ process.on('uncaughtException', (error: Error): void => {
 
     const exitSignals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM', 'SIGQUIT'];
 
-    exitSignals.map((signal: NodeJS.Signals): NodeJS.Process =>
-      process.on(signal, async (): Promise<void> => {
+    for (const exitSignal of exitSignals) {
+      process.on(exitSignal, async (): Promise<void> => {
         try {
           await server.close();
 
@@ -49,8 +49,8 @@ process.on('uncaughtException', (error: Error): void => {
           logger.error(`App exited with an error: ${error}`);
           process.exit(ExitStatus.FAILURE);
         }
-      }));
-
+      });
+    }
   } catch (error) {
     logger.error(`App exited with an error: ${error}`);
 
