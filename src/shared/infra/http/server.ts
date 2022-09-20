@@ -53,7 +53,7 @@ export class MainServer extends Server {
   public start(): void {
     this.app.listen(this.port, (): void => {
       logger.info(
-        `Server listening on port ${this.port}`
+        `Server listening on port ${this.port}.`
       );
     });
   }
