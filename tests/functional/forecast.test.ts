@@ -6,6 +6,8 @@ import { User, UserModel } from '@src/shared/database/models/user.model';
 import apiForecastResponse1BeachFixture from '@tests/fixtures/api_forecast_response_1_beach.json';
 import stormGlassWeather3HoursFixture from '@tests/fixtures/stormglass_weather_3_hours.json';
 
+import { AuthProvider } from '@src/shared/container/providers/auth/auth.provider';
+
 describe('Beach forecast functional tests', (): void => {
   const defaultUser = {
     name: 'John Doe',
@@ -14,6 +16,7 @@ describe('Beach forecast functional tests', (): void => {
   }
 
   let user: UserModel;
+  let token: string;
 
   beforeEach(async (): Promise<void> => {
     await Beach.deleteMany();
@@ -30,6 +33,8 @@ describe('Beach forecast functional tests', (): void => {
     }
 
     await new Beach(defaultBeach).save();
+
+    token = AuthProvider.signToken(user.id);
   });
 
   it('should return a forecast with just a few times', async (): Promise<void> => {
@@ -43,8 +48,8 @@ describe('Beach forecast functional tests', (): void => {
     nock('https://api.stormglass.io:443', {
       encodedQueryParams: true,
       reqheaders: {
-        Authorization: (): boolean => 
-          true,
+        Authorization: (): boolean =>
+          true
       }
     })
       .defaultReplyHeaders({
@@ -52,7 +57,9 @@ describe('Beach forecast functional tests', (): void => {
           '*'
       }).get('/v2/weather/point').query(nockQuery).reply(200, stormGlassWeather3HoursFixture)
 
-    const { body, status } = await global.testRequest.get('/api/forecast');
+    const { body, status } = await global.testRequest
+      .get('/api/forecast')
+      .set({ 'x-access-token': token });
 
     expect(status).toBe(200);
     expect(body).toEqual(apiForecastResponse1BeachFixture);
@@ -67,7 +74,7 @@ describe('Beach forecast functional tests', (): void => {
     nock('https://api.stormglass.io:443', {
       encodedQueryParams: true,
       reqheaders: {
-        Authorization: (): boolean => 
+        Authorization: (): boolean =>
           true
       }
     })
@@ -76,7 +83,9 @@ describe('Beach forecast functional tests', (): void => {
           '*'
       }).get('/v2/weather/point').query(nockQuery).replyWithError('Something went wrong');
 
-    const { status } = await global.testRequest.get('/api/forecast');
+    const { status } = await global.testRequest
+      .get('/api/forecast')
+      .set({ 'x-access-token': token });
 
     expect(status).toBe(500);
   });
