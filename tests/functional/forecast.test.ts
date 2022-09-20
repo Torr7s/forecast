@@ -1,7 +1,7 @@
 import nock from 'nock';
 
-import { Beach, BeachPosition } from '@src/shared/database/models/beach.model';
-import { User, UserModel } from '@src/shared/database/models/user.model';
+import { Beach, BeachPosition } from '@src/shared/infra/mongo/models/beach.model';
+import { User, UserModel } from '@src/shared/infra/mongo/models/user.model';
 
 import apiForecastResponse1BeachFixture from '@tests/fixtures/api_forecast_response_1_beach.json';
 import stormGlassWeather3HoursFixture from '@tests/fixtures/stormglass_weather_3_hours.json';
@@ -88,5 +88,10 @@ describe('Beach forecast functional tests', (): void => {
       .set({ 'x-access-token': token });
 
     expect(status).toBe(500);
+  });
+
+  afterAll(async (): Promise<void> => {
+    await Beach.deleteMany();
+    await User.deleteMany();
   });
 });

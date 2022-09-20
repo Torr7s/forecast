@@ -1,5 +1,5 @@
-import { Beach, BeachPosition } from '@src/shared/database/models/beach.model';
-import { User, UserModel } from '@src/shared/database/models/user.model';
+import { Beach, BeachPosition } from '@src/shared/infra/mongo/models/beach.model';
+import { User, UserModel } from '@src/shared/infra/mongo/models/user.model';
 
 import { AuthProvider } from '@src/shared/container/providers/auth/auth.provider';
 
@@ -61,5 +61,10 @@ describe('Beaches functional tests', (): void => {
           'Beach validation failed: lat: Cast to Number failed for value \"invalid_string"\ (type string) at path "lat"'
       });
     });
+  });
+
+  afterAll(async (): Promise<void> => {
+    await Beach.deleteMany();
+    await User.deleteMany();
   });
 });
