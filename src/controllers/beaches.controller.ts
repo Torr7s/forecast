@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import { Request, Response } from 'express';
 import { ClassMiddleware, Controller, Post } from '@overnightjs/core';
 
-import { Beach, BeachModel } from '@src/shared/database/models/beach.model';
+import { Beach, BeachModel } from '@src/shared/infra/mongo/models/beach.model';
 
 import { AuthMiddleware } from '@src/shared/infra/http/middlewares/auth.middleware';
 

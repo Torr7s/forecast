@@ -3,7 +3,7 @@ import { ClassMiddleware, Controller, Get } from '@overnightjs/core';
 
 import { ForecastService } from '@src/services/forecast.service';
 
-import { Beach, BeachModel } from '@src/shared/database/models/beach.model';
+import { Beach, BeachModel } from '@src/shared/infra/mongo/models/beach.model';
 
 import { AuthMiddleware } from '@src/shared/infra/http/middlewares/auth.middleware';
 

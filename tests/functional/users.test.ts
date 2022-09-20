@@ -1,4 +1,4 @@
-import { User } from '@src/shared/database/models/user.model';
+import { User } from '@src/shared/infra/mongo/models/user.model';
 
 import { AuthProvider } from '@src/shared/container/providers/auth/auth.provider';
 

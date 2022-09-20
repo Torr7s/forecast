@@ -1,7 +1,7 @@
 import express, { Application } from 'express';
 import { Server } from '@overnightjs/core';
 
-import * as database from '../../database';
+import * as database from '../mongo';
 
 import { BeachesController } from '../../../controllers/beaches.controller';
 import { ForecastController } from '../../../controllers/forecast.controller';

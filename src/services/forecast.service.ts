@@ -2,7 +2,7 @@ import { StormGlassClient } from '@src/clients/stormGlass.client';
 
 import { ForecastProcessingInternalError } from '@src/shared/utils/errors/forecast/processing.error';
 
-import { Beach } from '@src/shared/database/models/beach.model';
+import { Beach } from '@src/shared/infra/mongo/models/beach.model';
 
 import {
   BeachForecast,

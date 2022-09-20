@@ -5,7 +5,7 @@ import { ForecastProcessingInternalError } from '@src/shared/utils/errors/foreca
 
 import stormGlassNormalized3HoursFixture from '@tests/fixtures/stormglass_normalized_response_3_hours.json';
 
-import { Beach, BeachPosition } from '@src/shared/database/models/beach.model';
+import { Beach, BeachPosition } from '@src/shared/infra/mongo/models/beach.model';
 
 import { TimeForecast } from '@src/typings';
 

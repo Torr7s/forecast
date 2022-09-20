@@ -3,7 +3,7 @@ import { Controller, Post } from '@overnightjs/core';
 
 import { BaseController } from './base.controller';
 
-import { User, UserModel } from '@src/shared/database/models/user.model';
+import { User, UserModel } from '@src/shared/infra/mongo/models/user.model';
 
 import { AuthProvider } from '@src/shared/container/providers/auth/auth.provider';
 

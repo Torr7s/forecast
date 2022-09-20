@@ -1,4 +1,4 @@
-import { Beach } from '@src/shared/database/models/beach.model';
+import { Beach } from '@src/shared/infra/mongo/models/beach.model';
 
 export interface StormGlassPointSource {
   [key: string]: number;
