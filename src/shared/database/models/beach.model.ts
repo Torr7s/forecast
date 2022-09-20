@@ -13,7 +13,7 @@ export interface Beach {
   position: BeachPosition;
   lat: number;
   lng: number;
-  user: Schema.Types.ObjectId
+  user: string | Schema.Types.ObjectId;
 }
 
 const beachSchema = new mongoose.Schema<Beach>({
