@@ -1,12 +1,24 @@
 import './shared/utils/module-alias';
 
 import config from 'config';
+import logger from './logger';
 
 import { MainServer } from './shared/infra/http/server';
 
-(async(): Promise<void> => {
-  const server: MainServer = new MainServer(config.get('app.port'));
-  await server.initialize();
+enum ExitStatus {
+  FAILURE = 1,
+  SUCCESS = 0
+}
 
-  server.start();
+(async(): Promise<void> => {
+  try {
+    const server: MainServer = new MainServer(config.get('app.port'));
+    await server.initialize();
+  
+    server.start();
+  } catch (error) {
+    logger.error(`App exited with error: ${error}`);
+
+    process.exit(ExitStatus.FAILURE);
+  }
 })();
