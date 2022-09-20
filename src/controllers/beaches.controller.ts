@@ -13,7 +13,12 @@ export class BeachesController {
   @Post('')
   public async create(request: Request, response: Response): Promise<Response> {
     try {
-      const beach: BeachModel = await new Beach(request.body).save();
+      const beach: BeachModel = await new Beach({
+        ...request.body,
+        ...{
+          user: request.user
+        }
+      }).save();
 
       return response.status(201).send(beach);
     } catch (error) {
