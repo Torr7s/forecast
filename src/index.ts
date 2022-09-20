@@ -10,14 +10,33 @@ enum ExitStatus {
   SUCCESS = 0
 }
 
-(async(): Promise<void> => {
+(async (): Promise<void> => {
   try {
     const server: MainServer = new MainServer(config.get('app.port'));
     await server.initialize();
-  
+
     server.start();
+
+    const exitSignals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM', 'SIGQUIT'];
+
+    exitSignals.map((signal: NodeJS.Signals): NodeJS.Process =>
+      process.on(signal, async (): Promise<void> => {
+        try {
+          await server.close();
+
+          logger.info(`App exited with success.`);
+          process.exit(ExitStatus.SUCCESS);
+
+          /* :D */
+
+        } catch (error) {
+          logger.error(`App exited with an error: ${error}`);
+          process.exit(ExitStatus.FAILURE);
+        }
+      }));
+
   } catch (error) {
-    logger.error(`App exited with error: ${error}`);
+    logger.error(`App exited with an error: ${error}`);
 
     process.exit(ExitStatus.FAILURE);
   }
