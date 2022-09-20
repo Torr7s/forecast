@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import './shared/utils/module-alias';
 
 import config from 'config';
