@@ -16,6 +16,15 @@ export class RatingService {
     return 3;
   }
 
+  /**
+   * Rate will start from 1 given there will be always some wave period
+   */
+  public getRatingForSwellPeriod(period: number): number {
+    const ratings: number[] = [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 4, 4, 4, 4, 5];
+
+    return ratings[period >= 14 ? 14 : period];
+  }
+
   private isWindOffShore(wavePosition: BeachPosition, windPosition: BeachPosition): boolean {
     return (
       (wavePosition === BeachPosition.N &&
