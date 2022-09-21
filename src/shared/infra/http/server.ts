@@ -1,4 +1,7 @@
-import express, { Application } from 'express';
+import express from 'express';
+import expressPino from 'express-pino-logger';
+import cors from 'cors';
+
 import { Server } from '@overnightjs/core';
 
 import * as database from '../mongo';
@@ -23,6 +26,16 @@ export class MainServer extends Server {
 
   private setupExpress(): void {
     this.app.use(express.json());
+    this.app.use(
+      expressPino({
+        logger
+      })
+    );
+    this.app.use(
+      cors({
+        origin: '*'
+      })
+    );
     this.app.use(
       express.urlencoded({
         extended: true
@@ -58,7 +71,7 @@ export class MainServer extends Server {
     });
   }
 
-  public getApp(): Application {
+  public getApp(): express.Application {
     return this.app;
   }
 }
