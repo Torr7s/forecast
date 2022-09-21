@@ -1,4 +1,4 @@
-import { User } from '@src/shared/infra/mongo/models/user.model';
+import { User, UserModel } from '@src/shared/infra/mongo/models/user.model';
 
 import { AuthProvider } from '@src/shared/container/providers/auth/auth.provider';
 
@@ -115,6 +115,50 @@ describe('Users functional tests', (): void => {
       });
 
       expect(status).toBe(401);
+    });
+  });
+
+  describe('When getting an user profile info', (): void => {
+    it('should return the token owner profile information', async (): Promise<void> => {
+      const newUser = {
+        name: 'John Doe',
+        email: 'johndoe@gmail.com',
+        password: 'youshallnotpass',
+      }
+
+      const user: UserModel = await new User(newUser).save();
+      const token: string = AuthProvider.signToken(user.id);
+
+      const { body, status } = await global.testRequest.get('/api/users/me').set({
+        'x-access-token': token
+      });
+
+      expect(status).toBe(200);
+      expect(body).toMatchObject(
+        JSON.parse(
+          JSON.stringify({
+            user
+          })
+        )
+      );
+    });
+
+    it('should return Not Found when the user is not found', async (): Promise<void> => {
+      const newUser = {
+        name: 'John Doe',
+        email: 'johndoe@gmail.com',
+        password: 'youshallnotpass',
+      }
+
+      const user: UserModel = new User(newUser);
+      const token: string = AuthProvider.signToken(user.id);
+
+      const { body, status } = await global.testRequest.get('/api/users/me').set({
+        'x-access-token': token
+      });
+
+      expect(status).toBe(404);
+      expect(body.message).toBe('User not found!');
     });
   });
 });
