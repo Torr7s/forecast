@@ -1,3 +1,5 @@
+import { RatingService } from './rating.service';
+
 import { StormGlassClient } from '@src/clients/stormGlass.client';
 
 import { ForecastProcessingInternalError } from '@src/shared/utils/errors/forecast/processing.error';
@@ -13,7 +15,10 @@ import {
 import logger from '@src/logger';
 
 export class ForecastService {
-  constructor(protected stormGlass: StormGlassClient = new StormGlassClient()) {};
+  constructor(
+    protected stormGlass: StormGlassClient = new StormGlassClient(),
+    protected ratingService: typeof RatingService = RatingService
+  ) {};
 
   public async processForecastForBeaches(beaches: Beach[]): Promise<TimeForecast[]> {
     const pointsWithCorrectSources: BeachForecast[] = [];
@@ -23,8 +28,10 @@ export class ForecastService {
     try {
 
       for (const beach of beaches) {
+        const rating = new this.ratingService(beach);
+
         const points: NormalizedForecastPoint[] = await this.stormGlass.fetchPoints(beach.lat, beach.lng);
-        const enrichedBeachData: BeachForecast[] = this.enrichBeachData(beach, points);
+        const enrichedBeachData: BeachForecast[] = this.enrichBeachData(beach, points, rating);
 
         pointsWithCorrectSources.push(...enrichedBeachData);
       }
@@ -39,7 +46,7 @@ export class ForecastService {
     }
   }
 
-  private enrichBeachData(beach: Beach, points: NormalizedForecastPoint[]): BeachForecast[] {
+  private enrichBeachData(beach: Beach, points: NormalizedForecastPoint[], rating: RatingService): BeachForecast[] {
     const enrichedBeachData: BeachForecast[] = points
       .map((point: NormalizedForecastPoint): BeachForecast => ({
         ...{
@@ -47,7 +54,7 @@ export class ForecastService {
           lat: beach.lat,
           lng: beach.lng,
           position: beach.position,
-          rating: 1
+          rating: rating.getRateForPoint(point)
         },
         ...point
       }));
