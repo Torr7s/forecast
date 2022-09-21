@@ -21,7 +21,7 @@ const waveHeights = {
 export class RatingService {
   constructor(private beach: Beach) {};
 
-  public getRateForPoint(point: NormalizedForecastPoint): number {
+  public getPointRate(point: NormalizedForecastPoint): number {
     const swellDirection: GeoPosition = this.getPositionFromLocation(point.swellDirection);
     const windDirection: GeoPosition = this.getPositionFromLocation(point.windDirection);
 
