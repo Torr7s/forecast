@@ -20,7 +20,7 @@ export class StormGlassClient {
 
   constructor(protected request: Request = new Request()) {};
 
-  public async fetchPoints(lat: number, lng: number): Promise<NormalizedForecastPoint[]> {
+  public async fetchPointWeatherData(lat: number, lng: number): Promise<NormalizedForecastPoint[]> {
     try {
       const url: string = `${stormGlassResourceConfig.get('apiUrl')}/weather/point?lat=${lat}&lng=${lng}&params=${this.stormGlassApiParams}&source=${this.stormGlassApiSource}`;
 
