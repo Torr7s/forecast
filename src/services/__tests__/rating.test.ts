@@ -97,4 +97,39 @@ describe('Rating Service', (): void => {
       expect(rating).toBe(5);
     });
   });
+
+  /**
+   * Location specific calculation
+   */
+  describe('Get position based on POINTS LOCATION', (): void => {
+    it('should get the point based on a east location', (): void => {
+      const response: BeachPosition = defaultRating.getPositionFromLocation(92);
+
+      expect(response).toBe(BeachPosition.E);
+    });
+
+    it('should get the point based on a north location 1', (): void => {
+      const response: BeachPosition = defaultRating.getPositionFromLocation(360);
+
+      expect(response).toBe(BeachPosition.N);
+    });
+
+    it('should get the point based on a north location 2', (): void => {
+      const response: BeachPosition = defaultRating.getPositionFromLocation(40);
+
+      expect(response).toBe(BeachPosition.N);
+    });
+
+    it('should get the point based on a south location', (): void => {
+      const response: BeachPosition = defaultRating.getPositionFromLocation(200);
+
+      expect(response).toBe(BeachPosition.S);
+    });
+
+    it('should get the point based on a west location', (): void => {
+      const response: BeachPosition = defaultRating.getPositionFromLocation(300);
+
+      expect(response).toBe(BeachPosition.W);
+    });
+  });
 });
