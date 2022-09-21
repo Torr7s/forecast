@@ -1,0 +1,42 @@
+import { RatingService } from '../rating.service';
+
+import { Beach, BeachPosition } from '@src/shared/infra/mongo/models/beach.model';
+
+describe('Rating Service', (): void => {
+  const defaultBeach: Beach = {
+    lat: -33.792726,
+    lng: 151.289824,
+    name: 'Manly',
+    position: BeachPosition.E,
+    user: 'fake-user-id'
+  }
+
+  const defaultRating = new RatingService(defaultBeach);
+
+  describe('Calculate rating for a given point', (): void => {
+    // todo 
+  });
+
+  /**
+   * Wave and wind rating calculating
+   */
+  describe('Get rating based on WIND and WAVE POSITIONS', (): void => {
+    it('should get rating 1 for a beach with onshore winds', (): void => {
+      const rating: number = defaultRating.getRatingBasedOnWindAndWavePositions(BeachPosition.E, BeachPosition.E);
+
+      expect(rating).toBe(1);
+    });
+
+    it('should get rating 3 for a beach with cross winds', (): void => {
+      const rating: number = defaultRating.getRatingBasedOnWindAndWavePositions(BeachPosition.E, BeachPosition.S);
+
+      expect(rating).toBe(3);
+    });
+
+    it('should get rating 5 for a beach with offshore winds', (): void => {
+      const rating: number = defaultRating.getRatingBasedOnWindAndWavePositions(BeachPosition.E, BeachPosition.W);
+
+      expect(rating).toBe(5);
+    });
+  });
+});
