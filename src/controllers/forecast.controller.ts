@@ -5,15 +5,15 @@ import {
   Get 
 } from '@overnightjs/core';
 
-import { ForecastService } from '@src/services/forecast.service';
-import { TimeForecast } from '@src/typings';
-
 import { BaseController } from './base.controller';
 
 import { Beach, BeachModel } from '@src/shared/infra/mongo/models/beach.model';
 
+import { ForecastService } from '@src/services/forecast.service';
+
 import { AuthMiddleware } from '@src/shared/infra/http/middlewares/auth.middleware';
 
+import { TimeForecast } from '@src/typings';
 import logger from '@src/logger';
 
 const forecastService = new ForecastService();
