@@ -52,7 +52,7 @@ export class ForecastService {
     for (const beach of beaches) {
       const rating = new this.ratingService(beach);
 
-      const forecastPoints: NormalizedForecastPoint[] = await this.stormGlass.fetchPoints(beach.lat, beach.lng);
+      const forecastPoints: NormalizedForecastPoint[] = await this.stormGlass.fetchPointWeatherData(beach.lat, beach.lng);
       const enrichedBeachData: BeachForecast[] = this.enrichBeachData(beach, forecastPoints, rating);
 
       forecastPointsWithCorrectSources.push(...enrichedBeachData);
@@ -69,7 +69,7 @@ export class ForecastService {
           lat: beach.lat,
           lng: beach.lng,
           position: beach.position,
-          rating: rating.getRateForPoint(point)
+          rating: rating.getPointRate(point)
         },
         ...point
       }));

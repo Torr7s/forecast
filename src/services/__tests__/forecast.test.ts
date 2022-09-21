@@ -15,7 +15,7 @@ describe('Forecast Service', (): void => {
   const mockedStormGlassService = new StormGlassClient() as jest.Mocked<StormGlassClient>;
 
   it('should return the forecast for mutiple beaches in the same hour with different ratings ordered by rating', async () => {
-    mockedStormGlassService.fetchPoints.mockResolvedValueOnce([
+    mockedStormGlassService.fetchPointWeatherData.mockResolvedValueOnce([
       {
         swellDirection: 123.41,
         swellHeight: 0.21,
@@ -32,7 +32,7 @@ describe('Forecast Service', (): void => {
      * It is expected that this beach's score will be better than the first one, 
      * because it has better points such as waveHeight and swellPeriod
     */
-    mockedStormGlassService.fetchPoints.mockResolvedValueOnce([
+    mockedStormGlassService.fetchPointWeatherData.mockResolvedValueOnce([
       {
         swellDirection: 64.26,
         swellHeight: 0.15,
@@ -107,7 +107,7 @@ describe('Forecast Service', (): void => {
   });
 
   it('should return the forecast for a list of beaches', async (): Promise<void> => {
-    mockedStormGlassService.fetchPoints.mockResolvedValue(stormGlassNormalized3HoursFixture);
+    mockedStormGlassService.fetchPointWeatherData.mockResolvedValue(stormGlassNormalized3HoursFixture);
 
     const beaches: Beach[] = [
       {
@@ -204,7 +204,7 @@ describe('Forecast Service', (): void => {
       user: 'fake-user-id'
     }];
 
-    mockedStormGlassService.fetchPoints.mockRejectedValue('Error fetching data');
+    mockedStormGlassService.fetchPointWeatherData.mockRejectedValue('Error fetching data');
 
     const forecast: ForecastService = new ForecastService(mockedStormGlassService);
 

@@ -26,7 +26,7 @@ describe('Rating Service', (): void => {
     }
 
     it('should get a rating less than 1 for a poor point', (): void => {
-      const rating: number = defaultRating.getRateForPoint(defaultPoint);
+      const rating: number = defaultRating.getPointRate(defaultPoint);
 
       expect(rating).toBe(1)
     });
@@ -42,7 +42,7 @@ describe('Rating Service', (): void => {
         ...pointData
       };
 
-      const rating: number = defaultRating.getRateForPoint(point);
+      const rating: number = defaultRating.getPointRate(point);
 
       expect(rating).toBe(1);
     });
@@ -56,7 +56,7 @@ describe('Rating Service', (): void => {
         }
       }
 
-      const rating: number = defaultRating.getRateForPoint(point);
+      const rating: number = defaultRating.getPointRate(point);
       
       expect(rating).toBe(3);
     });

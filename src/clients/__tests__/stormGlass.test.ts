@@ -26,8 +26,8 @@ describe('StormGlass Client', (): void => {
 
     mockedRequest.get.mockResolvedValue({ data: stormGlassWeather3HoursFixture } as Response);
 
-    const stormGlass: StormGlassClient = new StormGlassClient(mockedRequest);
-    const response: NormalizedForecastPoint[] = await stormGlass.fetchPoints(lat, lng);
+    const stormGlassClient: StormGlassClient = new StormGlassClient(mockedRequest);
+    const response: NormalizedForecastPoint[] = await stormGlassClient.fetchPointWeatherData(lat, lng);
 
     expect(response).toEqual(stormGlassNormalized3HoursFixture);
   });
@@ -49,8 +49,8 @@ describe('StormGlass Client', (): void => {
 
     mockedRequest.get.mockResolvedValue({ data: incompleteResponse } as Response);
 
-    const stormGlass: StormGlassClient = new StormGlassClient(mockedRequest);
-    const response: NormalizedForecastPoint[] = await stormGlass.fetchPoints(lat, lng);
+    const stormGlassClient: StormGlassClient = new StormGlassClient(mockedRequest);
+    const response: NormalizedForecastPoint[] = await stormGlassClient.fetchPointWeatherData(lat, lng);
 
     expect(response).toEqual([]);
   });
@@ -61,10 +61,10 @@ describe('StormGlass Client', (): void => {
 
     mockedRequest.get.mockRejectedValue('Network Error');
 
-    const stormGlass: StormGlassClient = new StormGlassClient(mockedRequest);
+    const stormGlassClient: StormGlassClient = new StormGlassClient(mockedRequest);
 
     expect(async (): Promise<void> => {
-      await stormGlass.fetchPoints(
+      await stormGlassClient.fetchPointWeatherData(
         lat,
         lng
       )
@@ -88,10 +88,10 @@ describe('StormGlass Client', (): void => {
       }
     });
 
-    const stormGlass: StormGlassClient = new StormGlassClient(mockedRequest);
+    const stormGlassClient: StormGlassClient = new StormGlassClient(mockedRequest);
 
     expect(async (): Promise<void> => {
-      await stormGlass.fetchPoints(
+      await stormGlassClient.fetchPointWeatherData(
         lat,
         lng
       )
