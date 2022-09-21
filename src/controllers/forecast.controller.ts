@@ -1,13 +1,18 @@
 import { Request, Response } from 'express';
-import { ClassMiddleware, Controller, Get } from '@overnightjs/core';
+import { 
+  ClassMiddleware, 
+  Controller, 
+  Get 
+} from '@overnightjs/core';
 
 import { ForecastService } from '@src/services/forecast.service';
+import { TimeForecast } from '@src/typings';
+
+import { BaseController } from './base.controller';
 
 import { Beach, BeachModel } from '@src/shared/infra/mongo/models/beach.model';
 
 import { AuthMiddleware } from '@src/shared/infra/http/middlewares/auth.middleware';
-
-import { TimeForecast } from '@src/typings';
 
 import logger from '@src/logger';
 
@@ -15,7 +20,7 @@ const forecastService = new ForecastService();
 
 @Controller('api/forecast')
 @ClassMiddleware(AuthMiddleware)
-export class ForecastController {
+export class ForecastController extends BaseController {
   @Get('')
   public async getForecastForLoggedUser(request: Request, response: Response): Promise<Response> {
     try {
@@ -27,11 +32,10 @@ export class ForecastController {
     } catch (error) {
       logger.error(error);
 
-      return response
-        .status(500)
-        .send({
-          error: 'Something went wrong'
-        });
+      return this.createErrorResponse(response, {
+        code: 500,
+        message: 'Something went wrong'
+      });
     }
   }
 }

@@ -28,23 +28,20 @@ export class UsersController extends BaseController {
     const user: UserModel = await User.findOne({ email });
 
     if (!user) {
-      return response
-        .status(401)
-        .send({
-          code: 401,
-          error: 'User not found!'
-        });
+      return this.createErrorResponse(response, {
+        code: 401,
+        message: 'User not found!',
+        description: 'Try verifying your email address.'
+      });
     }
 
     const validPassword: boolean = await AuthProvider.comparePasswords(password, user.password);
 
     if (!validPassword) {
-      return response
-        .status(401)
-        .send({
-          code: 401,
-          error: 'Invalid password given!'
-        });
+      return this.createErrorResponse(response, {
+        code: 401,
+        message: 'Invalid password given!'
+      });
     };
 
     const token: string = AuthProvider.signToken(user.id);
