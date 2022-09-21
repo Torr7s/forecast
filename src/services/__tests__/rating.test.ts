@@ -1,20 +1,65 @@
 import { RatingService } from '../rating.service';
 
-import { Beach, BeachPosition } from '@src/shared/infra/mongo/models/beach.model';
+import { Beach, GeoPosition } from '@src/shared/infra/mongo/models/beach.model';
 
 describe('Rating Service', (): void => {
   const defaultBeach: Beach = {
     lat: -33.792726,
     lng: 151.289824,
     name: 'Manly',
-    position: BeachPosition.E,
+    position: GeoPosition.E,
     user: 'fake-user-id'
   }
 
   const defaultRating = new RatingService(defaultBeach);
 
   describe('Calculate rating for a given point', (): void => {
-    // todo 
+    const defaultPoint = {
+      swellDirection: 110,
+      swellHeight: 0.1,
+      swellPeriod: 5,
+      time: 'test',
+      waveDirection: 110,
+      waveHeight: 0.1,
+      windDirection: 100,
+      windSpeed: 100
+    }
+
+    it('should get a rating less than 1 for a poor point', (): void => {
+      const rating: number = defaultRating.getRateForPoint(defaultPoint);
+
+      expect(rating).toBe(1)
+    });
+
+    it('should get a rating of 1 for an ok point', (): void => {
+      const pointData = {
+        swellHeight: 0.4,
+      }
+
+      /* Using spread for cloning objects */
+      const point = {
+        ...defaultPoint,
+        ...pointData
+      };
+
+      const rating: number = defaultRating.getRateForPoint(point);
+
+      expect(rating).toBe(1);
+    });
+
+    it('should get a rating of 3 for a point with offshore winds and a half overhead height', (): void => {
+      const point = {
+        ...defaultPoint,
+        ...{
+          swellHeight: 0.7,
+          windDirection: 250,
+        }
+      }
+
+      const rating: number = defaultRating.getRateForPoint(point);
+      
+      expect(rating).toBe(3);
+    });
   });
 
   /**
@@ -22,19 +67,19 @@ describe('Rating Service', (): void => {
    */
   describe('Get rating based on WIND and WAVE POSITIONS', (): void => {
     it('should get rating 1 for a beach with onshore winds', (): void => {
-      const rating: number = defaultRating.getRatingBasedOnWindAndWavePositions(BeachPosition.E, BeachPosition.E);
+      const rating: number = defaultRating.getRatingBasedOnWindAndWavePositions(GeoPosition.E, GeoPosition.E);
 
       expect(rating).toBe(1);
     });
 
     it('should get rating 3 for a beach with cross winds', (): void => {
-      const rating: number = defaultRating.getRatingBasedOnWindAndWavePositions(BeachPosition.E, BeachPosition.S);
+      const rating: number = defaultRating.getRatingBasedOnWindAndWavePositions(GeoPosition.E, GeoPosition.S);
 
       expect(rating).toBe(3);
     });
 
     it('should get rating 5 for a beach with offshore winds', (): void => {
-      const rating: number = defaultRating.getRatingBasedOnWindAndWavePositions(BeachPosition.E, BeachPosition.W);
+      const rating: number = defaultRating.getRatingBasedOnWindAndWavePositions(GeoPosition.E, GeoPosition.W);
 
       expect(rating).toBe(5);
     });
@@ -103,33 +148,33 @@ describe('Rating Service', (): void => {
    */
   describe('Get position based on POINTS LOCATION', (): void => {
     it('should get the point based on a east location', (): void => {
-      const response: BeachPosition = defaultRating.getPositionFromLocation(92);
+      const response: GeoPosition = defaultRating.getPositionFromLocation(92);
 
-      expect(response).toBe(BeachPosition.E);
+      expect(response).toBe(GeoPosition.E);
     });
 
     it('should get the point based on a north location 1', (): void => {
-      const response: BeachPosition = defaultRating.getPositionFromLocation(360);
+      const response: GeoPosition = defaultRating.getPositionFromLocation(360);
 
-      expect(response).toBe(BeachPosition.N);
+      expect(response).toBe(GeoPosition.N);
     });
 
     it('should get the point based on a north location 2', (): void => {
-      const response: BeachPosition = defaultRating.getPositionFromLocation(40);
+      const response: GeoPosition = defaultRating.getPositionFromLocation(40);
 
-      expect(response).toBe(BeachPosition.N);
+      expect(response).toBe(GeoPosition.N);
     });
 
     it('should get the point based on a south location', (): void => {
-      const response: BeachPosition = defaultRating.getPositionFromLocation(200);
+      const response: GeoPosition = defaultRating.getPositionFromLocation(200);
 
-      expect(response).toBe(BeachPosition.S);
+      expect(response).toBe(GeoPosition.S);
     });
 
     it('should get the point based on a west location', (): void => {
-      const response: BeachPosition = defaultRating.getPositionFromLocation(300);
+      const response: GeoPosition = defaultRating.getPositionFromLocation(300);
 
-      expect(response).toBe(BeachPosition.W);
+      expect(response).toBe(GeoPosition.W);
     });
   });
 });
