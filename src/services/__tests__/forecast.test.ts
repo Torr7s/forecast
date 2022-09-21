@@ -5,7 +5,7 @@ import { ForecastProcessingInternalError } from '@src/shared/utils/errors/foreca
 
 import stormGlassNormalized3HoursFixture from '@tests/fixtures/stormglass_normalized_response_3_hours.json';
 
-import { Beach, BeachPosition } from '@src/shared/infra/mongo/models/beach.model';
+import { Beach, GeoPosition } from '@src/shared/infra/mongo/models/beach.model';
 
 import { TimeForecast } from '@src/typings';
 
@@ -21,7 +21,7 @@ describe('Forecast Service', (): void => {
       lat: -33.792726,
       lng: 141.289824,
       name: 'Manly',
-      position: BeachPosition.E,
+      position: GeoPosition.E,
       user: 'fake-user-id'
     }];
 
@@ -106,7 +106,7 @@ describe('Forecast Service', (): void => {
       lat: -33.792726,
       lng: 141.289824,
       name: 'Manly',
-      position: BeachPosition.E,
+      position: GeoPosition.E,
       user: 'fake-user-id'
     }];
 

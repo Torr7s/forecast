@@ -1,6 +1,6 @@
 import nock from 'nock';
 
-import { Beach, BeachPosition } from '@src/shared/infra/mongo/models/beach.model';
+import { Beach, GeoPosition } from '@src/shared/infra/mongo/models/beach.model';
 import { User, UserModel } from '@src/shared/infra/mongo/models/user.model';
 
 import apiForecastResponse1BeachFixture from '@tests/fixtures/api_forecast_response_1_beach.json';
@@ -28,7 +28,7 @@ describe('Beach forecast functional tests', (): void => {
       lat: -33.792726,
       lng: 151.289824,
       name: 'Manly',
-      position: BeachPosition.E,
+      position: GeoPosition.E,
       user: user.id
     }
 

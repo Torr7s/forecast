@@ -1,4 +1,4 @@
-import { Beach, BeachPosition } from '@src/shared/infra/mongo/models/beach.model';
+import { Beach, GeoPosition } from '@src/shared/infra/mongo/models/beach.model';
 import { User, UserModel } from '@src/shared/infra/mongo/models/user.model';
 
 import { AuthProvider } from '@src/shared/container/providers/auth/auth.provider';
@@ -26,7 +26,7 @@ describe('Beaches functional tests', (): void => {
     it('should create a beach successfully', async (): Promise<void> => {
       const newBeach = {
         name: 'Manly',
-        position: BeachPosition.E,
+        position: GeoPosition.E,
         lat: -33.792726,
         lng: 151.289824,
         user: user.id
@@ -44,7 +44,7 @@ describe('Beaches functional tests', (): void => {
     it('should return 422 when there is a validation error', async (): Promise<void> => {
       const newBeach = {
         name: 'Manly',
-        position: BeachPosition.E,
+        position: GeoPosition.E,
         lat: 'invalid_string',
         lng: 151.289824,
         user: user.id
