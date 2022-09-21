@@ -36,3 +36,15 @@ export interface TimeForecast {
   time: string;
   forecast: BeachForecast[];
 }
+
+export interface ApiErrorProps {
+  code: number;
+  message: string;
+  codeAsString?: string;
+  description?: string;
+  documentation?: string;
+}
+
+export interface ApiErrorResponse extends Omit<ApiErrorProps, 'codeAsString'> {
+  error: string;
+}
