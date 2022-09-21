@@ -3,27 +3,64 @@ import { StormGlassClient } from '@src/clients/stormGlass.client';
 import { ForecastService } from '../forecast.service';
 import { ForecastProcessingInternalError } from '@src/shared/utils/errors/forecast/processing.error';
 
-import stormGlassNormalized3HoursFixture from '@tests/fixtures/stormglass_normalized_response_3_hours.json';
-
 import { Beach, GeoPosition } from '@src/shared/infra/mongo/models/beach.model';
 
 import { TimeForecast } from '@src/typings';
+
+import stormGlassNormalized3HoursFixture from '@tests/fixtures/stormglass_normalized_response_3_hours.json';
 
 jest.mock('@src/clients/stormGlass.client');
 
 describe('Forecast Service', (): void => {
   const mockedStormGlassService = new StormGlassClient() as jest.Mocked<StormGlassClient>;
 
-  it('should return the forecast for a list of beaches', async (): Promise<void> => {
-    mockedStormGlassService.fetchPoints.mockResolvedValue(stormGlassNormalized3HoursFixture);
+  it('should return the forecast for mutiple beaches in the same hour with different ratings', async () => {
+    mockedStormGlassService.fetchPoints.mockResolvedValueOnce([
+      {
+        swellDirection: 123.41,
+        swellHeight: 0.21,
+        swellPeriod: 3.67,
+        time: '2022-09-10T00:00:00+00:00',
+        waveDirection: 232.12,
+        waveHeight: 0.46,
+        windDirection: 310.48,
+        windSpeed: 100,
+      }
+    ]);
 
-    const beaches: Beach[] = [{
-      lat: -33.792726,
-      lng: 141.289824,
-      name: 'Manly',
-      position: GeoPosition.E,
-      user: 'fake-user-id'
-    }];
+    /**
+     * It is expected that this beach's score will be better than the first one, 
+     * because it has better points such as waveHeight and swellPeriod
+    */
+    mockedStormGlassService.fetchPoints.mockResolvedValueOnce([
+      {
+        swellDirection: 64.26,
+        swellHeight: 0.15,
+        swellPeriod: 13.89,
+        time: '2022-09-10T00:00:00+00:00',
+        waveDirection: 231.38,
+        waveHeight: 2.07,
+        windDirection: 299.45,
+        windSpeed: 100,
+      }
+    ]);
+
+    const beaches: Beach[] = [
+      {
+        lat: -33.792726,
+        lng: 151.289824,
+        name: 'Manly',
+        position: GeoPosition.E,
+        user: 'fake-user-id',
+      },
+      {
+        lat: -33.792726,
+        lng: 141.289824,
+        name: 'Dee Why',
+        position: GeoPosition.S,
+        user: 'fake-user-id',
+      }
+    ];
 
     const expectedResponse = [
       {
@@ -31,10 +68,67 @@ describe('Forecast Service', (): void => {
         forecast: [
           {
             lat: -33.792726,
-            lng: 141.289824,
+            lng: 151.289824,
             name: 'Manly',
             position: 'East',
-            rating: 1,
+            rating: 2,
+            swellDirection: 123.41,
+            swellHeight: 0.21,
+            swellPeriod: 3.67,
+            time: '2022-09-10T00:00:00+00:00',
+            waveDirection: 232.12,
+            waveHeight: 0.46,
+            windDirection: 310.48,
+            windSpeed: 100
+          },
+          {
+            lat: -33.792726,
+            lng: 141.289824,
+            name: 'Dee Why',
+            position: 'South',
+            rating: 3,
+            swellDirection: 64.26,
+            swellHeight: 0.15,
+            swellPeriod: 13.89,
+            time: '2022-09-10T00:00:00+00:00',
+            waveDirection: 231.38,
+            waveHeight: 2.07,
+            windDirection: 299.45,
+            windSpeed: 100
+          }
+        ]
+      }
+    ];
+
+    const forecast: ForecastService = new ForecastService(mockedStormGlassService);
+    const beachesWithRating: TimeForecast[] = await forecast.processForecastForBeaches(beaches);
+
+    expect(beachesWithRating).toEqual(expectedResponse);
+  });
+
+  it('should return the forecast for a list of beaches', async (): Promise<void> => {
+    mockedStormGlassService.fetchPoints.mockResolvedValue(stormGlassNormalized3HoursFixture);
+
+    const beaches: Beach[] = [
+      {
+        lat: -33.792726,
+        lng: 151.289824,
+        name: 'Manly',
+        position: GeoPosition.E,
+        user: 'fake-user-id',
+      }
+    ];
+
+    const expectedResponse = [
+      {
+        time: '2022-09-10T00:00:00+00:00',
+        forecast: [
+          {
+            lat: -33.792726,
+            lng: 151.289824,
+            name: 'Manly',
+            position: 'East',
+            rating: 2,
             swellDirection: 64.26,
             swellHeight: 0.15,
             swellPeriod: 3.89,
@@ -51,10 +145,10 @@ describe('Forecast Service', (): void => {
         forecast: [
           {
             lat: -33.792726,
-            lng: 141.289824,
+            lng: 151.289824,
             name: 'Manly',
             position: 'East',
-            rating: 1,
+            rating: 2,
             swellDirection: 123.41,
             swellHeight: 0.21,
             swellPeriod: 3.67,
@@ -71,10 +165,10 @@ describe('Forecast Service', (): void => {
         forecast: [
           {
             lat: -33.792726,
-            lng: 141.289824,
+            lng: 151.289824,
             name: 'Manly',
             position: 'East',
-            rating: 1,
+            rating: 2,
             swellDirection: 182.56,
             swellHeight: 0.28,
             swellPeriod: 3.44,
@@ -82,13 +176,13 @@ describe('Forecast Service', (): void => {
             waveDirection: 232.86,
             waveHeight: 0.46,
             windDirection: 321.5,
-            windSpeed: 100
+            windSpeed: 100,
           }
         ]
       }
     ];
 
-    const forecast = new ForecastService(mockedStormGlassService);
+    const forecast: ForecastService = new ForecastService(mockedStormGlassService);
     const beachesWithRating: TimeForecast[] = await forecast.processForecastForBeaches(beaches);
 
     expect(beachesWithRating).toEqual(expectedResponse);
