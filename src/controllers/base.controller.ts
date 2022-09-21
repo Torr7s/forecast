@@ -5,6 +5,8 @@ import { CUSTOM_VALIDATION } from '@src/shared/infra/mongo/models/user.model';
 
 import logger from '@src/logger';
 
+import { ApiError, ApiErrorProps } from '@src/shared/utils/errors/api.error';
+
 interface ErrorResponse {
   code: number;
   error: string;
@@ -15,21 +17,22 @@ export abstract class BaseController {
     if (error instanceof mongoose.Error.ValidationError) {
       const { code, error: err }: ErrorResponse = this.handleClientErrors(error);
 
-      return this.createErrorResponse(response, code, err);
+      return this.createErrorResponse(response, {
+        code,
+        message: err
+      });
     }
 
     logger.error(error);
 
-    return this.createErrorResponse(response, 500, 'Something went wrong');
+    return this.createErrorResponse(response, {
+      code: 500,
+      message: 'Something went wrong'
+    });
   }
 
-  private createErrorResponse(response: Response, code: number, error: string): Response {
-    return response
-      .status(code)
-      .send({
-        code,
-        error
-      });
+  protected createErrorResponse(response: Response, apiError: ApiErrorProps): Response {
+    return response.status(apiError.code).send(ApiError.format(apiError));
   }
 
   private handleClientErrors(error: mongoose.Error.ValidationError): ErrorResponse {
