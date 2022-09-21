@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
 
-import { InternalError } from '../internal-error';
+import { InternalError } from '../internal.error';
 
 export class StormGlassResponseError extends InternalError {
   constructor(error: AxiosError) {
