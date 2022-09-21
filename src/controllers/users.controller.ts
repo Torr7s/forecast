@@ -1,11 +1,17 @@
 import { Request, Response } from 'express';
-import { Controller, Post } from '@overnightjs/core';
+import { 
+  Controller, 
+  Get, 
+  Middleware, 
+  Post 
+} from '@overnightjs/core';
 
 import { BaseController } from './base.controller';
 
 import { User, UserModel } from '@src/shared/infra/mongo/models/user.model';
 
 import { AuthProvider } from '@src/shared/container/providers/auth/auth.provider';
+import { AuthMiddleware } from '@src/shared/infra/http/middlewares/auth.middleware';
 
 @Controller('api/users')
 export class UsersController extends BaseController {
@@ -22,7 +28,7 @@ export class UsersController extends BaseController {
   }
 
   @Post('auth')
-  public async authenticate(request: Request, response: Response): Promise<Response | void> {
+  public async authenticate(request: Request, response: Response): Promise<Response> {
     const { email, password } = request.body;
 
     const user: UserModel = await User.findOne({ email });
@@ -51,5 +57,20 @@ export class UsersController extends BaseController {
       .send({
         token
       });
+  }
+
+  @Get('me')
+  @Middleware(AuthMiddleware)
+  public async me(request: Request, response: Response): Promise<Response> {
+    const user: UserModel = await User.findOne({ id: request.user });
+
+    if (!user) {
+      return this.createErrorResponse(response, {
+        code: 404,
+        message: 'User not found!'
+      });
+    }
+
+    return response.send({ user });
   }
 }
