@@ -21,7 +21,7 @@ const waveHeights = {
 export class RatingService {
   constructor(private beach: Beach) {};
 
-  public getRateForPoint(point: NormalizedForecastPoint) {
+  public getRateForPoint(point: NormalizedForecastPoint): number {
     const swellDirection: GeoPosition = this.getPositionFromLocation(point.swellDirection);
     const windDirection: GeoPosition = this.getPositionFromLocation(point.windDirection);
 
@@ -39,7 +39,7 @@ export class RatingService {
   }
 
   public getRatingBasedOnWindAndWavePositions(wavePosition: GeoPosition, windPosition: GeoPosition): number {
-    if (wavePosition === windPosition) 
+    if (wavePosition === windPosition)
       return 1;
     else if (
       this.isWindOffShore(
@@ -55,6 +55,8 @@ export class RatingService {
    * Rate will start from 1 given there will be always some wave period
    */
   public getRatingForSwellPeriod(period: number): number {
+    period = ~~(period);
+
     const ratings: number[] = [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 4, 4, 4, 4, 5];
 
     return ratings[period >= 14 ? 14 : period];
