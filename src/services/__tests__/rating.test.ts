@@ -39,4 +39,33 @@ describe('Rating Service', (): void => {
       expect(rating).toBe(5);
     });
   });
+
+  /**
+   * Period rating calculating
+   */
+  describe('Get rating based on SWELL PERIOD', (): void => {
+    it('should get a rating of 1 for a period of 5 seconds', (): void => {
+      const rating: number = defaultRating.getRatingForSwellPeriod(5);
+
+      expect(rating).toBe(1);
+    });
+
+    it('should get a rating of 2 for a period of 9 seconds', (): void => {
+      const rating: number = defaultRating.getRatingForSwellPeriod(9);
+
+      expect(rating).toBe(2);
+    });
+
+    it('should get a rating of 4 for a period of 12 seconds', (): void => {
+      const rating: number = defaultRating.getRatingForSwellPeriod(12);
+
+      expect(rating).toBe(4);
+    });
+
+    it('should get a rating of 5 for a period of 14 seconds', (): void => {
+      const rating: number = defaultRating.getRatingForSwellPeriod(16);
+
+      expect(rating).toBe(5);
+    });
+  });
 });
