@@ -1,5 +1,21 @@
 import { Beach, BeachPosition } from '@src/shared/infra/mongo/models/beach.model';
 
+// In meters
+const waveHeights = {
+  ankleToKnee: {
+    min: 0.3,
+    max: 1.0
+  },
+  waistHigh: {
+    min: 1.0,
+    max: 2.0
+  },
+  headHigh: {
+    min: 2.0,
+    max: 2.5
+  }
+}
+
 export class RatingService {
   constructor(private beach: Beach) {};
 
@@ -23,6 +39,17 @@ export class RatingService {
     const ratings: number[] = [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 4, 4, 4, 4, 5];
 
     return ratings[period >= 14 ? 14 : period];
+  }
+
+  /**
+   * Rate will start from 1 given there will always some wave height
+   */
+  public getRatingForSwellSize(height: number): number {
+    if (height < waveHeights.ankleToKnee.min) return 1;
+    if (height < waveHeights.ankleToKnee.max) return 2;
+    if (height < waveHeights.waistHigh.max) return 3;
+
+    return 5;
   }
 
   private isWindOffShore(wavePosition: BeachPosition, windPosition: BeachPosition): boolean {
