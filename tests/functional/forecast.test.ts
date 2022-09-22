@@ -6,6 +6,8 @@ import { User, UserModel } from '@src/shared/infra/mongo/models/user.model';
 import apiForecastResponse1BeachFixture from '@tests/fixtures/api_forecast_response_1_beach.json';
 import stormGlassWeather3HoursFixture from '@tests/fixtures/stormglass_weather_3_hours.json';
 
+import CacheUtil from '@src/shared/utils/cache';
+
 import { AuthProvider } from '@src/shared/container/providers/auth/auth.provider';
 
 describe('Beach forecast functional tests', (): void => {
@@ -35,6 +37,8 @@ describe('Beach forecast functional tests', (): void => {
     await new Beach(defaultBeach).save();
 
     token = AuthProvider.signToken(user.id);
+
+    CacheUtil.clearAllCache();
   });
 
   it('should return a forecast with just a few times', async (): Promise<void> => {
