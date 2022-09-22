@@ -17,6 +17,8 @@ import { BeachesController } from './controllers/beaches.controller';
 import { ForecastController } from './controllers/forecast.controller';
 import { UsersController } from './controllers/users.controller';
 
+import { ApiErrorValidator } from './middlewares/api-error-validator.middleware';
+
 export class MainServer extends Server {
   constructor(private port: number = 3000) {
     super();
@@ -28,6 +30,8 @@ export class MainServer extends Server {
     this.setupControllers();
 
     await this.databaseSetup();
+
+    this.setupErrorMiddleware();
   }
 
   private setupExpress(): void {
@@ -47,6 +51,10 @@ export class MainServer extends Server {
         extended: true
       })
     );
+  }
+
+  private setupErrorMiddleware(): void {
+    this.app.use(ApiErrorValidator);
   }
 
   private setupControllers(): void {
