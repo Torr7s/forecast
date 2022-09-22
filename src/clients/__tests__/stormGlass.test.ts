@@ -1,32 +1,40 @@
-import { Request, Response } from '@src/shared/utils/request';
+import * as HTTPUtil from '@src/shared/utils/request';
 
 import { StormGlassClient } from '../stormGlass.client';
 
 import stormGlassWeather3HoursFixture from '@tests/fixtures/stormglass_weather_3_hours.json';
 import stormGlassNormalized3HoursFixture from '@tests/fixtures/stormglass_normalized_response_3_hours.json';
 
+import CacheUtil from '@src/shared/utils/cache';
+
 import { NormalizedForecastPoint } from '@src/typings';
 
 jest.mock('@src/shared/utils/request');
+jest.mock('@src/shared/utils/cache');
 
 describe('StormGlass Client', (): void => {
-  const MockedRequestClass = Request as jest.Mocked<
-    typeof Request
+  /**
+   * Used for static method's mocks
+   */
+  const MockedRequestClass = HTTPUtil.Request as jest.Mocked<
+    typeof HTTPUtil.Request
   >;
+  const MockedCacheUtil = CacheUtil as jest.Mocked<typeof CacheUtil>;
 
   /**
-   * typeof has been removed because HTTP.Request is a class instance, not 
-   * the class itself
+   * Used for instance method's mocks
    */
-  const mockedRequest = new Request() as jest.Mocked<Request>;
+  const mockedRequest = new HTTPUtil.Request() as jest.Mocked<HTTPUtil.Request>;
 
   it('should return the normalized forecast from the StormGlass service', async (): Promise<void> => {
     const lat: number = -33.792726;
     const lng: number = 151.289824;
 
-    mockedRequest.get.mockResolvedValue({ data: stormGlassWeather3HoursFixture } as Response);
+    mockedRequest.get.mockResolvedValue({ data: stormGlassWeather3HoursFixture } as HTTPUtil.Response);
 
-    const stormGlassClient: StormGlassClient = new StormGlassClient(mockedRequest);
+    MockedCacheUtil.get.mockReturnValue(undefined);
+
+    const stormGlassClient: StormGlassClient = new StormGlassClient(mockedRequest, MockedCacheUtil);
     const response: NormalizedForecastPoint[] = await stormGlassClient.fetchPointWeatherData(lat, lng);
 
     expect(response).toEqual(stormGlassNormalized3HoursFixture);
@@ -47,12 +55,28 @@ describe('StormGlass Client', (): void => {
       ]
     }
 
-    mockedRequest.get.mockResolvedValue({ data: incompleteResponse } as Response);
+    mockedRequest.get.mockResolvedValue({ data: incompleteResponse } as HTTPUtil.Response);
 
-    const stormGlassClient: StormGlassClient = new StormGlassClient(mockedRequest);
+    MockedCacheUtil.get.mockReturnValue(undefined);
+
+    const stormGlassClient: StormGlassClient = new StormGlassClient(mockedRequest, MockedCacheUtil);
     const response: NormalizedForecastPoint[] = await stormGlassClient.fetchPointWeatherData(lat, lng);
 
     expect(response).toEqual([]);
+  });
+
+  it('should get the normalized forecast points from cache and use it to return data points', async (): Promise<void> => {
+    const lat = -33.792726;
+    const lng = 151.289824;
+
+    mockedRequest.get.mockResolvedValue({ data: null } as HTTPUtil.Response);
+
+    MockedCacheUtil.get.mockReturnValue(stormGlassNormalized3HoursFixture);
+
+    const stormGlassClient: StormGlassClient = new StormGlassClient(mockedRequest, MockedCacheUtil);
+    const response: NormalizedForecastPoint[] = await stormGlassClient.fetchPointWeatherData(lat, lng);
+
+    expect(response).toEqual(stormGlassNormalized3HoursFixture);
   });
 
   it('should get a generic error from StormGlass service when the request fail before reaching the service', async (): Promise<void> => {
@@ -61,7 +85,9 @@ describe('StormGlass Client', (): void => {
 
     mockedRequest.get.mockRejectedValue('Network Error');
 
-    const stormGlassClient: StormGlassClient = new StormGlassClient(mockedRequest);
+    MockedCacheUtil.get.mockReturnValue(undefined);
+
+    const stormGlassClient: StormGlassClient = new StormGlassClient(mockedRequest, MockedCacheUtil);
 
     expect(async (): Promise<void> => {
       await stormGlassClient.fetchPointWeatherData(
@@ -74,9 +100,7 @@ describe('StormGlass Client', (): void => {
   it('should get an StormGlassResponseError when the StormGlass service responds with an error', async (): Promise<void> => {
     const lat = -33.792726;
     const lng = 151.289824;
-
-    MockedRequestClass.isRequestError.mockReturnValue(true);
-
+    
     mockedRequest.get.mockRejectedValue({
       response: {
         status: 429,
@@ -88,7 +112,11 @@ describe('StormGlass Client', (): void => {
       }
     });
 
-    const stormGlassClient: StormGlassClient = new StormGlassClient(mockedRequest);
+    MockedRequestClass.isRequestError.mockReturnValue(true);
+
+    MockedCacheUtil.get.mockReturnValue(undefined);
+
+    const stormGlassClient: StormGlassClient = new StormGlassClient(mockedRequest, MockedCacheUtil);
 
     expect(async (): Promise<void> => {
       await stormGlassClient.fetchPointWeatherData(
