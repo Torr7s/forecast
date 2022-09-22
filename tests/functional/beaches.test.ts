@@ -41,7 +41,7 @@ describe('Beaches functional tests', (): void => {
       expect(response.body).toEqual(expect.objectContaining(newBeach));
     });
 
-    it('should return 422 when there is a validation error', async (): Promise<void> => {
+    it('should return validation error when a field is invalid', async (): Promise<void> => {
       const newBeach = {
         name: 'Manly',
         position: GeoPosition.E,
@@ -55,10 +55,10 @@ describe('Beaches functional tests', (): void => {
         .set({ 'x-access-token': token })
         .send(newBeach);
 
-      expect(response.status).toBe(422);
+      expect(response.status).toBe(400);
       expect(response.body).toEqual({
-        code: 422,
-        error: 'Unprocessable Entity',
+        code: 400,
+        error: 'Bad Request',
         message:
           'Beach validation failed: lat: Cast to Number failed for value \"invalid_string"\ (type string) at path "lat"'
       });

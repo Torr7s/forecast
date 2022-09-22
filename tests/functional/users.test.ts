@@ -32,7 +32,7 @@ describe('Users functional tests', (): void => {
       }));
     });
 
-    it('should return 422 when there is a validation error', async (): Promise<void> => {
+    it('should return a validation error when a field is missing', async (): Promise<void> => {
       const newUser = {
         email: 'johndoe@gmail.com',
         password: 'youshallnotpass'
@@ -40,10 +40,10 @@ describe('Users functional tests', (): void => {
 
       const { body, status } = await global.testRequest.post('/api/users').send(newUser);
 
-      expect(status).toBe(422);
+      expect(status).toBe(400);
       expect(body).toEqual({
-        code: 422,
-        error: 'Unprocessable Entity',
+        code: 400,
+        error: 'Bad Request',
         message:
           'User validation failed: name: Path `name` is required.'
       });
