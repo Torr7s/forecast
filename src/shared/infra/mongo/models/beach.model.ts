@@ -1,10 +1,10 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
 export enum GeoPosition {
-  S = 'South',
-  E = 'East',
-  W = 'West',
-  N = 'North'
+  S = 'S',
+  E = 'E',
+  W = 'W',
+  N = 'N'
 }
 
 export interface Beach {
