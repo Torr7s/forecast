@@ -42,7 +42,8 @@ describe('Beach forecast functional tests', (): void => {
       lat: '-33.792726',
       lng: '151.289824',
       params: /(.*)/,
-      source: 'noaa'
+      source: 'noaa',
+      end: /(.*)/
     }
 
     nock('https://api.stormglass.io:443', {
