@@ -12,6 +12,8 @@ import {
   StormGlassPointSource 
 } from '@src/typings';
 
+import { DateProvider } from '@src/shared/container/providers/date/date.provider';
+
 const stormGlassResourceConfig: IConfig = config.get('app.resources.stormGlass');
 
 export class StormGlassClient {
@@ -22,7 +24,9 @@ export class StormGlassClient {
 
   public async fetchPointWeatherData(lat: number, lng: number): Promise<NormalizedForecastPoint[]> {
     try {
-      const url: string = `${stormGlassResourceConfig.get('apiUrl')}/weather/point?lat=${lat}&lng=${lng}&params=${this.stormGlassApiParams}&source=${this.stormGlassApiSource}`;
+      const endTimestamp: number = DateProvider.getUnixTimeForAFutureDay(1);
+
+      const url: string = `${stormGlassResourceConfig.get('apiUrl')}/weather/point?lat=${lat}&lng=${lng}&params=${this.stormGlassApiParams}&source=${this.stormGlassApiSource}&end=${endTimestamp}`;
 
       const response: Response<StormGlassForecastResponse> = await this.request.get<StormGlassForecastResponse>(url, {
         headers: {
