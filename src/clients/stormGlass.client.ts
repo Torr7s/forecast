@@ -44,7 +44,7 @@ export class StormGlassClient {
     return forecastPoints;
   }
 
-  protected async getForecastPointsFromApi(lat: number, lng: number): Promise<NormalizedForecastPoint[]> {
+  private async getForecastPointsFromApi(lat: number, lng: number): Promise<NormalizedForecastPoint[]> {
     const endTimestamp: number = DateProvider.getUnixTimeForAFutureDay(1);
 
     try {
