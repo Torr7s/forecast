@@ -13,9 +13,9 @@ import logger from '@src/logger';
 
 import * as database from '../mongo';
 
-import { BeachesController } from '@src/controllers/beaches.controller';
-import { ForecastController } from '@src/controllers/forecast.controller';
-import { UsersController } from '@src/controllers/users.controller';
+import { BeachesController } from '@src/shared/infra/http/controllers/beaches.controller';
+import { ForecastController } from '@src/shared/infra/http/controllers/forecast.controller';
+import { UsersController } from '@src/shared/infra/http/controllers/users.controller';
 
 export class MainServer extends Server {
   constructor(private port: number = 3000) {
