@@ -1,4 +1,4 @@
-import './shared/utils/module-alias';
+import './shared/utils/aliases';
 
 import config from 'config';
 import logger from './logger';
