@@ -1,9 +1,10 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import config from 'config';
+
+const md5HashKey: string = config.get('app.auth.key');
 
 interface JwtPayload { sub: string; }
-
-const md5HashKey: string = process.env.MD5_HASH_KEY;
 
 export class AuthProvider {
   public static async hashPassword(password: string, salt: number = 9): Promise<string> {
