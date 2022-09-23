@@ -51,6 +51,10 @@ export abstract class DefaultMongoRepository<T extends BaseModel> extends Reposi
     }
   }
 
+  public async deleteAll(): Promise<void> {
+    await this.model.deleteMany();
+  }
+
   protected handleError(error: unknown): never {
     if (error instanceof Error.ValidationError) {
       const duplicatedKindErrors: (Error.ValidatorError | Error.CastError)[] = Object.values(error.errors).filter(
