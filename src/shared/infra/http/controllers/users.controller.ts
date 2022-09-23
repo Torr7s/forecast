@@ -62,7 +62,7 @@ export class UsersController extends BaseController {
   @Get('me')
   @Middleware(AuthMiddleware)
   public async me(request: Request, response: Response): Promise<Response> {
-    const user: UserModel = await User.findOne({ id: request.user });
+    const user: UserModel = await User.findOne({ id: request.userId });
 
     if (!user) {
       return this.createErrorResponse(response, {

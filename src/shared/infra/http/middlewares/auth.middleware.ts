@@ -8,7 +8,7 @@ export function AuthMiddleware(request: Partial<Request>, response: Partial<Resp
   try {
     const { sub } = AuthProvider.decodeToken(token);
 
-    request.user = sub;
+    request.userId = sub;
 
     next();
   } catch (error) {
