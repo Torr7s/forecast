@@ -1,4 +1,4 @@
-import { BaseRepository, WithId } from '.';
+import { BaseRepository, FilterOptions, WithId } from '.';
 
 export class DatabaseError extends Error {
   constructor(message: string) {
@@ -14,4 +14,5 @@ export class DatabaseUnknownClientError extends DatabaseError {};
 
 export abstract class Repository<T> implements BaseRepository<T> {
   public abstract create(data: T): Promise<WithId<T>>;
+  public abstract find(options: FilterOptions): Promise<WithId<T>[]>;
 } 
