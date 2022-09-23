@@ -1,10 +1,8 @@
-import mongoose from 'mongoose';
-import { Response } from 'express';
-
-import { CUSTOM_VALIDATION } from '@src/shared/infra/mongo/models/user.model';
-
 import logger from '@src/logger';
 
+import { Response } from 'express';
+
+import { DatabaseError, DatabaseValidationError } from '@src/repositories/repository';
 import { ApiError, ApiErrorProps } from '@src/shared/utils/errors/api.error';
 
 interface ErrorResponse {
@@ -13,8 +11,8 @@ interface ErrorResponse {
 }
 
 export abstract class BaseController {
-  protected sendCreateUpdateErrorResponse(response: Response, error: mongoose.Error.ValidationError | Error): Response {
-    if (error instanceof mongoose.Error.ValidationError) {
+  protected sendCreateUpdateErrorResponse(response: Response, error: unknown): Response {
+    if (error instanceof DatabaseValidationError) {
       const { code, error: err }: ErrorResponse = this.handleClientErrors(error);
 
       return this.createErrorResponse(response, {
@@ -35,10 +33,8 @@ export abstract class BaseController {
     return response.status(apiError.code).send(ApiError.format(apiError));
   }
 
-  private handleClientErrors(error: mongoose.Error.ValidationError): ErrorResponse {
-    const duplicatedKindErrors: (mongoose.Error.ValidatorError | mongoose.Error.CastError)[] = Object.values(error.errors).filter((err): boolean => err.kind === CUSTOM_VALIDATION.DUPLICATED);
-
-    if (duplicatedKindErrors.length) {
+  private handleClientErrors(error: DatabaseError): ErrorResponse {
+    if (error instanceof DatabaseValidationError) {
       return {
         code: 409,
         error: error.message
