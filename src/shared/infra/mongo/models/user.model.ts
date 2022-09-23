@@ -9,15 +9,16 @@ export enum CUSTOM_VALIDATION {
 }
 
 export interface User {
-  _id?: string;
   name: string;
   email: string;
   password: string;
 }
 
-export interface UserModel extends Omit<User, '_id'>, Document {}
+export interface ExistingUser extends User {
+  id: string;
+}
 
-const userSchema = new mongoose.Schema<UserModel>({
+const userSchema = new mongoose.Schema<User>({
   name: {
     type: String,
     required: true
@@ -51,7 +52,7 @@ userSchema.path('email').validate(async (email: string): Promise<boolean> => {
   CUSTOM_VALIDATION.DUPLICATED
 );
 
-userSchema.pre<UserModel>('save', async function (): Promise<void> {
+userSchema.pre<User & Document>('save', async function (): Promise<void> {
   if (!this.password || !this.isModified('password')) return;
 
   try {
@@ -63,4 +64,4 @@ userSchema.pre<UserModel>('save', async function (): Promise<void> {
   }
 });
 
-export const User: Model<UserModel> = mongoose.model<UserModel>('User', userSchema);
+export const User: Model<User> = mongoose.model<User>('User', userSchema);
