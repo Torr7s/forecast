@@ -32,9 +32,20 @@ export abstract class DefaultMongoRepository<T extends BaseModel> extends Reposi
   public async find(options: FilterOptions) {
     try {
       const data = await this.model.find(options);
-      const dataMapped: WithId<T>[] = data.map((d) => d.toJSON<WithId<T>>() as WithId<T>);
+      const dataMapped: WithId<T>[] = data?.map((d) => d.toJSON<WithId<T>>() as WithId<T>);
 
       return dataMapped;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  public async findOne(options: FilterOptions): Promise<WithId<T>> {
+    try {
+      const data = await this.model.findOne(options);
+      const dataJSON = data?.toJSON<WithId<T>>() as WithId<T>;
+
+      return dataJSON;
     } catch (error) {
       this.handleError(error);
     }
