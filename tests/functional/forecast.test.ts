@@ -1,7 +1,12 @@
 import nock from 'nock';
 
-import { Beach, GeoPosition } from '@src/shared/infra/mongo/models/beach.model';
-import { User, UserModel } from '@src/shared/infra/mongo/models/user.model';
+import { GeoPosition } from '@src/shared/infra/mongo/models/beach.model';
+
+import { User } from '@src/shared/infra/mongo/models/user.model';
+
+import { WithId } from '@src/repositories';
+import { MongoUserRepository } from '@src/repositories/user.repository';
+import { MongoBeachRepository } from '@src/repositories/beach.repository';
 
 import apiForecastResponse1BeachFixture from '@tests/fixtures/api_forecast_response_1_beach.json';
 import stormGlassWeather3HoursFixture from '@tests/fixtures/stormglass_weather_3_hours.json';
@@ -17,14 +22,17 @@ describe('Beach forecast functional tests', (): void => {
     password: 'youshallnotpass'
   }
 
-  let user: UserModel;
+  let user: WithId<User>;
   let token: string;
 
   beforeEach(async (): Promise<void> => {
-    await Beach.deleteMany();
-    await User.deleteMany();
+    const mongoBeachRepo: MongoBeachRepository = new MongoBeachRepository()
+    const mongoUserRepo: MongoUserRepository = new MongoUserRepository();
 
-    user = await new User(defaultUser).save();
+    await mongoBeachRepo.deleteAll();
+    await mongoUserRepo.deleteAll();
+
+    user = await mongoUserRepo.create(defaultUser);
 
     const defaultBeach = {
       lat: -33.792726,
@@ -34,7 +42,7 @@ describe('Beach forecast functional tests', (): void => {
       user: user.id
     }
 
-    await new Beach(defaultBeach).save();
+    await mongoBeachRepo.create(defaultBeach);
 
     token = AuthProvider.signToken(user.id);
 
@@ -93,10 +101,5 @@ describe('Beach forecast functional tests', (): void => {
       .set({ 'x-access-token': token });
 
     expect(status).toBe(500);
-  });
-
-  afterAll(async (): Promise<void> => {
-    await Beach.deleteMany();
-    await User.deleteMany();
   });
 });
