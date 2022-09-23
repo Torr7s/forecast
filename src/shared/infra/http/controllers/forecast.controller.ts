@@ -13,8 +13,10 @@ import { BaseController } from './base.controller';
 import { ForecastService } from '@src/services/forecast.service';
 
 import { AuthMiddleware } from '@src/shared/infra/http/middlewares/auth.middleware';
-import { Beach, BeachModel } from '@src/shared/infra/mongo/models/beach.model';
 import { ApiError } from '@src/shared/utils/errors/api.error';
+
+import { Beach } from '@src/shared/infra/mongo/models/beach.model';
+import { BeachRepository, WithId } from '@src/repositories';
 
 import { TimeForecast } from '@src/typings';
 
@@ -39,11 +41,15 @@ const RateLimiterMiddleware: RateLimitRequestHandler = rateLimit({
 @Controller('api/forecast')
 @ClassMiddleware(AuthMiddleware)
 export class ForecastController extends BaseController {
+  constructor(private beachRepository: BeachRepository) {
+    super();
+  };
+
   @Get('')
   @Middleware(RateLimiterMiddleware)
   public async getForecastForLoggedUser(request: Request, response: Response): Promise<Response> {
     try {
-      const beaches: BeachModel[] = await Beach.find({ user: request.user });
+      const beaches: WithId<Beach>[] = await this.beachRepository.findAllBeachesForUser(request.userId);
 
       const forecastData: TimeForecast[] = await forecastService.processForecastForBeaches(beaches);
 
