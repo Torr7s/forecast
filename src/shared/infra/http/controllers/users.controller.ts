@@ -8,20 +8,24 @@ import {
 
 import { BaseController } from './base.controller';
 
-import { User, UserModel } from '@src/shared/infra/mongo/models/user.model';
+import { User } from '@src/shared/infra/mongo/models/user.model';
+import { UserRepository, WithId } from '@src/repositories';
 
 import { AuthProvider } from '@src/shared/container/providers/auth/auth.provider';
 import { AuthMiddleware } from '@src/shared/infra/http/middlewares/auth.middleware';
 
 @Controller('api/users')
 export class UsersController extends BaseController {
+  constructor(private userRepository: UserRepository) {
+    super();
+  }
+
   @Post('')
   public async create(request: Request, response: Response): Promise<Response> {
     try {
-      const user = new User(request.body);
-      const newUser: UserModel = await user.save();
+      const user: WithId<User> = await this.userRepository.create(request.body);
 
-      return response.status(201).send(newUser);
+      return response.status(201).send(user);
     } catch (error) {
       return this.sendCreateUpdateErrorResponse(response, error);
     }
@@ -31,8 +35,8 @@ export class UsersController extends BaseController {
   public async authenticate(request: Request, response: Response): Promise<Response> {
     const { email, password } = request.body;
 
-    const user: UserModel = await User.findOne({ email });
-
+    const user: WithId<User> = await this.userRepository.findByEmail(email);
+    
     if (!user) {
       return this.createErrorResponse(response, {
         code: 401,
@@ -62,7 +66,7 @@ export class UsersController extends BaseController {
   @Get('me')
   @Middleware(AuthMiddleware)
   public async me(request: Request, response: Response): Promise<Response> {
-    const user: UserModel = await User.findOne({ id: request.userId });
+    const user = await this.userRepository.findById(request.userId);
 
     if (!user) {
       return this.createErrorResponse(response, {
