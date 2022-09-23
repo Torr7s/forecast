@@ -1,9 +1,14 @@
-import { User, UserModel } from '@src/shared/infra/mongo/models/user.model';
+import { User } from '@src/shared/infra/mongo/models/user.model';
+
+import { WithId } from '@src/repositories';
+import { MongoUserRepository } from '@src/repositories/user.repository';
 
 import { AuthProvider } from '@src/shared/container/providers/auth/auth.provider';
 
 describe('Users functional tests', (): void => {
-  beforeEach(async (): Promise<any> => await User.deleteMany({}));
+  const mongoUserRepository: MongoUserRepository = new MongoUserRepository();
+
+  beforeEach(async (): Promise<any> => await mongoUserRepository.deleteAll());
 
   describe('When creating a new user', (): void => {
     it('should create a new user with an encrypted password successfully', async (): Promise<void> => {
@@ -77,12 +82,14 @@ describe('Users functional tests', (): void => {
         password: 'youshallnotpass',
       }
 
-      await new User(newUser).save();
+      const user: WithId<User> = await mongoUserRepository.create(newUser);
 
-      const { body } = await global.testRequest.post('/api/users/auth').send({
-        email: newUser.email,
-        password: newUser.password
-      });
+      const { body } = await global.testRequest
+        .post('/api/users/auth')
+        .send({
+          email: newUser.email,
+          password: newUser.password
+        });
 
       expect(body).toEqual(
         expect.objectContaining({
@@ -92,10 +99,12 @@ describe('Users functional tests', (): void => {
     });
 
     it('should return UNAUTHORIZED if the given email was not found', async (): Promise<void> => {
-      const { status } = await global.testRequest.post('/api/users/auth').send({
-        email: 'fakeemail@yahoo.com',
-        password: 'youshallnotpass'
-      });
+      const { status } = await global.testRequest
+        .post('/api/users/auth')
+        .send({
+          email: 'fakeemail@yahoo.com',
+          password: 'youshallnotpass'
+        });
 
       expect(status).toBe(401)
     });
@@ -107,12 +116,14 @@ describe('Users functional tests', (): void => {
         password: 'youshallnotpass',
       }
 
-      await new User(newUser).save();
+      await mongoUserRepository.create(newUser);
 
-      const { status } = await global.testRequest.post('/api/users/auth').send({
-        email: newUser.password,
-        password: '123'
-      });
+      const { status } = await global.testRequest
+        .post('/api/users/auth')
+        .send({
+          email: newUser.password,
+          password: '123'
+        });
 
       expect(status).toBe(401);
     });
@@ -126,7 +137,7 @@ describe('Users functional tests', (): void => {
         password: 'youshallnotpass',
       }
 
-      const user: UserModel = await new User(newUser).save();
+      const user: WithId<User> = await mongoUserRepository.create(newUser);
       const token: string = AuthProvider.signToken(user.id);
 
       const { body, status } = await global.testRequest
@@ -150,7 +161,7 @@ describe('Users functional tests', (): void => {
         password: 'youshallnotpass',
       }
 
-      const user: UserModel = new User(newUser);
+      const user = new User(newUser);
       const token: string = AuthProvider.signToken(user.id);
 
       const { body, status } = await global.testRequest
