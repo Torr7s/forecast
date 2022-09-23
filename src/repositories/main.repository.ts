@@ -1,4 +1,4 @@
-import { BaseRepository, FilterOptions, WithId } from '.';
+import { BaseRepository, FilterOptions, WithId } from './base.repository';
 
 export class DatabaseError extends Error {
   constructor(message: string) {

@@ -1,12 +1,12 @@
 import { Error, Model } from 'mongoose';
 
-import { FilterOptions, WithId } from '.';
+import { FilterOptions, WithId } from '../base.repository';
 import {
   DatabaseInternalError,
   DatabaseUnknownClientError,
   DatabaseValidationError,
   Repository
-} from './repository';
+} from '../main.repository';
 
 import { BaseModel } from '@src/shared/infra/mongo/models/base.model';
 import { CUSTOM_VALIDATION } from '@src/shared/infra/mongo/models/user.model';

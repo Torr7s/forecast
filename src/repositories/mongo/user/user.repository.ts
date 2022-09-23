@@ -1,7 +1,7 @@
 import { Model } from 'mongoose';
 
-import { UserRepository, WithId } from '.';
-import { DefaultMongoRepository } from './mongo.repository';
+import { UserRepository, WithId } from '../../base.repository';
+import { DefaultMongoRepository } from '../mongo.repository';
 
 import { User } from '@src/shared/infra/mongo/models/user.model';
 

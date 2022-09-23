@@ -1,7 +1,7 @@
 import { Model } from 'mongoose';
 
-import { BeachRepository, WithId } from '.';
-import { DefaultMongoRepository } from './mongo.repository';
+import { BeachRepository, WithId } from '../../base.repository';
+import { DefaultMongoRepository } from '../mongo.repository';
 
 import { Beach } from '@src/shared/infra/mongo/models/beach.model';
 
