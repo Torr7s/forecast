@@ -129,9 +129,9 @@ describe('Users functional tests', (): void => {
       const user: UserModel = await new User(newUser).save();
       const token: string = AuthProvider.signToken(user.id);
 
-      const { body, status } = await global.testRequest.get('/api/users/me').set({
-        'x-access-token': token
-      });
+      const { body, status } = await global.testRequest
+        .get('/api/users/me')
+        .set({ 'x-access-token': token });
 
       expect(status).toBe(200);
       expect(body).toMatchObject(
@@ -153,9 +153,9 @@ describe('Users functional tests', (): void => {
       const user: UserModel = new User(newUser);
       const token: string = AuthProvider.signToken(user.id);
 
-      const { body, status } = await global.testRequest.get('/api/users/me').set({
-        'x-access-token': token
-      });
+      const { body, status } = await global.testRequest
+        .get('/api/users/me')
+        .set({ 'x-access-token': token });
 
       expect(status).toBe(404);
       expect(body.message).toBe('User not found!');

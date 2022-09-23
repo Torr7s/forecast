@@ -32,13 +32,13 @@ describe('Beaches functional tests', (): void => {
         user: user.id
       }
 
-      const response = await global.testRequest
+      const { body, status } = await global.testRequest
         .post('/api/beaches')
         .set({ 'x-access-token': token })
         .send(newBeach);
 
-      expect(response.status).toBe(201);
-      expect(response.body).toEqual(expect.objectContaining(newBeach));
+      expect(status).toBe(201);
+      expect(body).toEqual(expect.objectContaining(newBeach));
     });
 
     it('should return validation error when a field is invalid', async (): Promise<void> => {
@@ -50,13 +50,13 @@ describe('Beaches functional tests', (): void => {
         user: user.id
       }
 
-      const response = await global.testRequest
+      const { body, status } = await global.testRequest
         .post('/api/beaches')
         .set({ 'x-access-token': token })
         .send(newBeach);
 
-      expect(response.status).toBe(400);
-      expect(response.body).toEqual({
+      expect(status).toBe(400);
+      expect(body).toEqual({
         code: 400,
         error: 'Bad Request',
         message: 'request.body.lat should be number'
