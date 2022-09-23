@@ -8,6 +8,7 @@ export interface BaseRepository<T> {
   create(data: T): Promise<WithId<T>>;
   find(options: FilterOptions): Promise<WithId<T>[]>;
   findOne(options: FilterOptions): Promise<WithId<T> | undefined>;
+  deleteAll(): Promise<void>;
 }
 
 export interface BeachRepository extends BaseRepository<Beach> {
