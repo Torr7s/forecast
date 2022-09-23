@@ -5,7 +5,7 @@ import { Repository } from './repository';
 
 import { BaseModel } from '@src/shared/infra/mongo/models/base.model';
 
-export abstract class MongoRepository<T extends BaseModel> extends Repository<T> {
+export abstract class DefaultMongoRepository<T extends BaseModel> extends Repository<T> {
   constructor(private model: Model<T>) {
     super();
   }
@@ -15,5 +15,5 @@ export abstract class MongoRepository<T extends BaseModel> extends Repository<T>
     const modelJSON = model.toJSON<WithId<T>>() as WithId<T>;
 
     return modelJSON;
-  } 
+  }
 }
