@@ -9,7 +9,7 @@ import {
 import { BaseController } from './base.controller';
 
 import { User } from '@src/shared/infra/mongo/models/user.model';
-import { UserRepository, WithId } from '@src/repositories';
+import { UserRepository, WithId } from '@src/repositories/base.repository';
 
 import { AuthProvider } from '@src/shared/container/providers/auth/auth.provider';
 import { AuthMiddleware } from '@src/shared/infra/http/middlewares/auth.middleware';

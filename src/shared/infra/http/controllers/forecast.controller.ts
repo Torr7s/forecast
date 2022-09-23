@@ -16,7 +16,7 @@ import { AuthMiddleware } from '@src/shared/infra/http/middlewares/auth.middlewa
 import { ApiError } from '@src/shared/utils/errors/api.error';
 
 import { Beach } from '@src/shared/infra/mongo/models/beach.model';
-import { BeachRepository, WithId } from '@src/repositories';
+import { BeachRepository, WithId } from '@src/repositories/base.repository';
 
 import { TimeForecast } from '@src/typings';
 

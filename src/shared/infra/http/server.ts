@@ -17,8 +17,8 @@ import { BeachesController } from './controllers/beaches.controller';
 import { ForecastController } from './controllers/forecast.controller';
 import { UsersController } from './controllers/users.controller';
 
-import { MongoBeachRepository } from '@src/repositories/beach.repository';
-import { MongoUserRepository } from '@src/repositories/user.repository';
+import { MongoBeachRepository } from '@src/repositories/mongo/beach/beach.repository';
+import { MongoUserRepository } from '@src/repositories/mongo/user/user.repository';
 
 import { ApiErrorValidator } from './middlewares/api-error-validator.middleware';
 

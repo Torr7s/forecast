@@ -8,7 +8,7 @@ import {
 import { BaseController } from './base.controller';
 
 import { Beach } from '@src/shared/infra/mongo/models/beach.model';
-import { BeachRepository, WithId } from '@src/repositories';
+import { BeachRepository, WithId } from '@src/repositories/base.repository';
 
 import { AuthMiddleware } from '@src/shared/infra/http/middlewares/auth.middleware';
 

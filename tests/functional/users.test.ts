@@ -1,7 +1,7 @@
 import { User } from '@src/shared/infra/mongo/models/user.model';
 
-import { WithId } from '@src/repositories';
-import { MongoUserRepository } from '@src/repositories/user.repository';
+import { WithId } from '@src/repositories/base.repository';
+import { MongoUserRepository } from '@src/repositories/mongo/user/user.repository';
 
 import { AuthProvider } from '@src/shared/container/providers/auth/auth.provider';
 

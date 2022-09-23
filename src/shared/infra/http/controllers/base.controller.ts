@@ -8,7 +8,7 @@ import {
   DatabaseError, 
   DatabaseUnknownClientError, 
   DatabaseValidationError 
-} from '@src/repositories/repository';
+} from '@src/repositories/main.repository';
 
 interface ErrorResponse {
   code: number;

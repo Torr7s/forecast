@@ -4,9 +4,9 @@ import { GeoPosition } from '@src/shared/infra/mongo/models/beach.model';
 
 import { User } from '@src/shared/infra/mongo/models/user.model';
 
-import { WithId } from '@src/repositories';
-import { MongoUserRepository } from '@src/repositories/user.repository';
-import { MongoBeachRepository } from '@src/repositories/beach.repository';
+import { WithId } from '@src/repositories/base.repository';
+import { MongoBeachRepository } from '@src/repositories/mongo/beach/beach.repository';
+import { MongoUserRepository } from '@src/repositories/mongo/user/user.repository';
 
 import apiForecastResponse1BeachFixture from '@tests/fixtures/api_forecast_response_1_beach.json';
 import stormGlassWeather3HoursFixture from '@tests/fixtures/stormglass_weather_3_hours.json';
