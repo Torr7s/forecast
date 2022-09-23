@@ -30,7 +30,9 @@ export interface NormalizedForecastPoint {
   windSpeed: number;
 }
 
-export interface BeachForecast extends Omit<Beach, 'user'>, NormalizedForecastPoint {}
+export interface BeachForecast extends Omit<Beach, 'user'>, NormalizedForecastPoint {
+  rating: number;
+}
 
 export interface TimeForecast {
   time: string;
