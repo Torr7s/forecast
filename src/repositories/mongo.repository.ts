@@ -1,6 +1,6 @@
 import { Error, Model } from 'mongoose';
 
-import { WithId } from '.';
+import { FilterOptions, WithId } from '.';
 import {
   DatabaseInternalError,
   DatabaseUnknownClientError,
@@ -24,6 +24,17 @@ export abstract class DefaultMongoRepository<T extends BaseModel> extends Reposi
       const modelJSON = model.toJSON<WithId<T>>() as WithId<T>;
   
       return modelJSON;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  public async find(options: FilterOptions) {
+    try {
+      const data = await this.model.find(options);
+      const dataMapped: WithId<T>[] = data.map((d) => d.toJSON<WithId<T>>() as WithId<T>);
+
+      return dataMapped;
     } catch (error) {
       this.handleError(error);
     }
