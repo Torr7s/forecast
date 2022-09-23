@@ -17,6 +17,8 @@ import { BeachesController } from './controllers/beaches.controller';
 import { ForecastController } from './controllers/forecast.controller';
 import { UsersController } from './controllers/users.controller';
 
+import { MongoBeachRepository } from '@src/repositories/beach.repository';
+
 import { ApiErrorValidator } from './middlewares/api-error-validator.middleware';
 
 export class MainServer extends Server {
@@ -58,7 +60,7 @@ export class MainServer extends Server {
   }
 
   private setupControllers(): void {
-    const beachesController: BeachesController = new BeachesController()
+    const beachesController: BeachesController = new BeachesController(new MongoBeachRepository());
     const forecastController: ForecastController = new ForecastController();
     const usersController: UsersController = new UsersController();
 
