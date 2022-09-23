@@ -27,7 +27,7 @@ export class BeachesController extends BaseController {
       const beach: WithId<Beach> = await this.beachRepository.create({
         ...request.body,
         ...{
-          user: request.user
+          user: request.userId
         }
       });
 
