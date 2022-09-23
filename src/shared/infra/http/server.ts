@@ -60,8 +60,10 @@ export class MainServer extends Server {
   }
 
   private setupControllers(): void {
-    const beachesController: BeachesController = new BeachesController(new MongoBeachRepository());
-    const forecastController: ForecastController = new ForecastController();
+    const mongoBeachRepo: MongoBeachRepository = new MongoBeachRepository()
+
+    const beachesController: BeachesController = new BeachesController(mongoBeachRepo);
+    const forecastController: ForecastController = new ForecastController(mongoBeachRepo);
     const usersController: UsersController = new UsersController();
 
     this.addControllers([
