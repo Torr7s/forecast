@@ -2,8 +2,13 @@ import logger from '@src/logger';
 
 import { Response } from 'express';
 
-import { DatabaseError, DatabaseValidationError } from '@src/repositories/repository';
 import { ApiError, ApiErrorProps } from '@src/shared/utils/errors/api.error';
+
+import { 
+  DatabaseError, 
+  DatabaseUnknownClientError, 
+  DatabaseValidationError 
+} from '@src/repositories/repository';
 
 interface ErrorResponse {
   code: number;
@@ -12,7 +17,10 @@ interface ErrorResponse {
 
 export abstract class BaseController {
   protected sendCreateUpdateErrorResponse(response: Response, error: unknown): Response {
-    if (error instanceof DatabaseValidationError) {
+    if (
+      error instanceof DatabaseValidationError ||
+      error instanceof DatabaseUnknownClientError 
+    ) {
       const { code, error: err }: ErrorResponse = this.handleClientErrors(error);
 
       return this.createErrorResponse(response, {
