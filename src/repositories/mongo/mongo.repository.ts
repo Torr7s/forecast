@@ -5,7 +5,7 @@ import {
   DatabaseInternalError,
   DatabaseUnknownClientError,
   DatabaseValidationError,
-  Repository
+  MainRepository
 } from '../main.repository';
 
 import { BaseModel } from '@src/shared/infra/mongo/models/base.model';
@@ -13,7 +13,7 @@ import { CUSTOM_VALIDATION } from '@src/shared/infra/mongo/models/user.model';
 
 import logger from '@src/logger';
 
-export abstract class DefaultMongoRepository<T extends BaseModel> extends Repository<T> {
+export abstract class DefaultMongoRepository<T extends BaseModel> extends MainRepository<T> {
   constructor(private model: Model<T>) {
     super();
   }
