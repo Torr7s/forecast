@@ -19,10 +19,14 @@ export abstract class DefaultMongoRepository<T extends BaseModel> extends Reposi
   }
 
   public async create(data: T): Promise<WithId<T>> {
-    const model = await new this.model(data).save();
-    const modelJSON = model.toJSON<WithId<T>>() as WithId<T>;
-
-    return modelJSON;
+    try {
+      const model = await new this.model(data).save();
+      const modelJSON = model.toJSON<WithId<T>>() as WithId<T>;
+  
+      return modelJSON;
+    } catch (error) {
+      this.handleError(error);
+    }
   }
 
   protected handleError(error: unknown): never {
