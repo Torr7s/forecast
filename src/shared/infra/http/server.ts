@@ -3,15 +3,15 @@ import cors from 'cors';
 import expressPino from 'express-pino-logger';
 import swaggerUI from 'swagger-ui-express';
 
-import { Server } from '@overnightjs/core';
-
-import * as OpenApiValidator from 'express-openapi-validator';
-import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';
-
-import apiSchema from '@src/api-schema.json';
+import swaggerJSON from '@src/swagger.json';
 import logger from '@src/logger';
 
 import * as database from '../mongo';
+import * as OpenApiValidator from 'express-openapi-validator';
+
+import { Server } from '@overnightjs/core';
+
+import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';
 
 import { BeachesController } from './controllers/beaches.controller';
 import { ForecastController } from './controllers/forecast.controller';
@@ -70,10 +70,10 @@ export class MainServer extends Server {
   }
 
   private setupDocs(): void {
-    this.app.use('/docs', swaggerUI.serve, swaggerUI.setup(apiSchema));
+    this.app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerJSON));
     this.app.use(
       OpenApiValidator.middleware({
-        apiSpec: apiSchema as OpenAPIV3.Document,
+        apiSpec: swaggerJSON as OpenAPIV3.Document,
         validateRequests: true,
         validateResponses: true
       })
