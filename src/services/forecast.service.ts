@@ -22,7 +22,11 @@ export class ForecastService {
     protected ratingService: typeof RatingService = RatingService
   ) {};
 
-  public async processForecastForBeaches(beaches: Beach[]): Promise<TimeForecast[]> {
+  public async processForecastForBeaches(
+    beaches: Beach[],
+    orderField: keyof BeachForecast = 'rating',
+    orderBy: 'asc' | 'desc' = 'desc'
+  ): Promise<TimeForecast[]> {
     try {
       const beachForecasts: BeachForecast[] = await this.calculateRating(beaches);
       const forecastsByTime: TimeForecast[] = this.mapForecastsByTime(beachForecasts);
@@ -34,7 +38,7 @@ export class ForecastService {
         }: TimeForecast) => (
           {
             time,
-            forecast: _.orderBy(forecast, ['rating'], ['desc'])
+            forecast: _.orderBy(forecast, [orderField], [orderBy])
           })
       );
 
