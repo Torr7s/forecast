@@ -24,21 +24,29 @@ cd beach-forecast-api
 
 - Install the dependencies
 ```bash
-npm install 
+cd api/ 
 
 yarn
 ```
 
-- Set the environment variables in the .env and config/ file
+```bash
+cd server/
+
+yarn
+```
+
+- Into api/, set the environment variables in the .env and config/ file
 
 - Run the following command to launch the client 
 ```bash
+cd api/
+
 yarn start
 ```
 
 - Run the following commands to launch the web server 
 ```bash
-cd web/
+cd server/
 
 yarn start
 ```
